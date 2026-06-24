@@ -92,6 +92,10 @@
 | **REQ-IHC-12** | Estado de Carga Activo (Spinner) | El botón de confirmación cambia a 'Procesando...' con un spinner visual al enviar el checkout para evitar el doble clic. | **Visibilidad del Estado del Sistema** | `Implementado` |
 | **REQ-IHC-13** | Feedback Positivo de Éxito (Toast) | Alertas flotantes temporales de color verde/teal al agregar componentes o aplicar cupones con éxito. | **Visibilidad del Estado del Sistema** | `Implementado` |
 | **REQ-IHC-14** | Limpieza Rápida del Buscador | Un botón interactivo de 'X' dentro del input de búsqueda para limpiar el filtro de texto con un solo clic. | **Flexibilidad y Eficiencia de Uso** | `Implementado` |
+| **REQ-IHC-15** | Menú de Ayuda Desplegable (FAQs) | Un componente interactivo tipo acordeón en el frontend para resolver dudas frecuentes del usuario de forma inmediata. | **Ayuda y Documentación** | `Pendiente de Ajuste` |
+| **REQ-IHC-16** | Alternador de Contraste Visual | Un botón accesible para cambiar entre el modo oscuro y un modo claro de alta legibilidad según el entorno del usuario. | **Flexibilidad y Eficiencia de Uso** | `Pendiente de Ajuste` |
+| **REQ-IHC-17** | Indicador de Progreso en Campos | Mensajes dinámicos de guía que cambian de color (rojo/amarillo/verde) según la validez de los datos ingresados en el formulario. | **Prevención de Errores** | `Pendiente de Ajuste` |
+
 
 ---
 

@@ -43,6 +43,9 @@ export default function Home() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [animateBadge, setAnimateBadge] = useState(false);
   const [showClearCartConfirm, setShowClearCartConfirm] = useState(false);
+  const [theme, setTheme] = useState("light");
+  const [openFaq, setOpenFaq] = useState(null);
+
 
   // Fetch products
   useEffect(() => {
@@ -82,7 +85,19 @@ export default function Home() {
     } catch (e) {
       console.error("Error reading cart from localStorage", e);
     }
+
+    // Load theme from localStorage
+    try {
+      const savedTheme = localStorage.getItem("theme");
+      const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initialTheme = savedTheme || (systemPrefersDark ? "dark" : "light");
+      setTheme(initialTheme);
+      document.documentElement.setAttribute("data-theme", initialTheme);
+    } catch (e) {
+      console.error("Error loading theme", e);
+    }
   }, []);
+
 
   // Save wishlist changes
   useEffect(() => {
@@ -148,7 +163,35 @@ export default function Home() {
     }
   }
 
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    showToast(`Modo ${newTheme === "light" ? "Claro" : "Oscuro"} activado`, "success");
+  };
+
+  const faqs = [
+    {
+      q: "¿Cómo funciona la reserva de componentes y el stock?",
+      a: "Nuestro sistema valida el stock físico en tiempo real. Cuando añades un componente al carrito o realizas la compra, se verifica la disponibilidad directa en nuestro servidor para evitar sobreventas."
+    },
+    {
+      q: "¿Cómo aplico un cupón de descuento?",
+      a: "En el Paso 2 del Checkout, introduce el código de descuento (por ejemplo, 'DESCUENTO10') en el campo correspondiente y presiona 'Aplicar' para obtener una deducción inmediata del 10%."
+    },
+    {
+      q: "¿Los favoritos se guardan permanentemente?",
+      a: "Sí, todos los componentes marcados con el icono de corazón se guardan de forma local en tu navegador utilizando localStorage, por lo que persistirán incluso si recargas la página."
+    },
+    {
+      q: "¿Cómo puedo imprimir un recibo de mi compra?",
+      a: "Una vez completado con éxito el checkout, aparecerá un modal con los detalles de tu compra y un botón para 'Imprimir Recibo'. Esto dará formato A4 optimizado y ocultará elementos innecesarios."
+    }
+  ];
+
   // Show dynamic toast alerts
+
   const showToast = (message, type = "success") => {
     const id = Date.now() + Math.random().toString(36).substr(2, 9);
     setToasts((prev) => [...prev, { id, message, type }]);
@@ -275,7 +318,57 @@ export default function Home() {
     return error;
   };
 
+  const getFieldStatus = (field, value) => {
+    if (!value || value.trim().length === 0) {
+      return { status: "red", text: "Este campo es obligatorio" };
+    }
+    if (field === "name") {
+      if (value.trim().length < 3) {
+        return { status: "yellow", text: `Ingresando... faltan ${3 - value.trim().length} caracteres` };
+      }
+      return { status: "green", text: "✓ Nombre válido" };
+    }
+    if (field === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        return { status: "yellow", text: "Ingresa un formato de correo electrónico válido" };
+      }
+      return { status: "green", text: "✓ Correo electrónico válido" };
+    }
+    if (field === "address") {
+      if (value.trim().length < 10) {
+        return { status: "yellow", text: `Ingresando... faltan ${10 - value.trim().length} caracteres` };
+      }
+      return { status: "green", text: "✓ Dirección válida" };
+    }
+    if (field === "city") {
+      return { status: "green", text: "✓ Ciudad válida" };
+    }
+    if (field === "phone") {
+      const digits = value.replace(/\D/g, "");
+      if (digits.length < 7) {
+        return { status: "yellow", text: `Ingresando... faltan ${7 - digits.length} dígitos` };
+      }
+      if (digits.length > 10) {
+        return { status: "red", text: "El teléfono no debe superar los 10 dígitos" };
+      }
+      return { status: "green", text: "✓ Teléfono válido" };
+    }
+    return { status: "green", text: "Válido" };
+  };
+
+  const getInputBorderClass = (field) => {
+    if (!touchedFields[field]) return "";
+    const info = getFieldStatus(field, customer[field]);
+    if (info.status === "red") return "is-invalid";
+    if (info.status === "yellow") return "is-warning";
+    if (info.status === "green") return "is-valid";
+    return "";
+  };
+
   const handleInputChange = (field, val) => {
+
+
     setCustomer(prev => ({ ...prev, [field]: val }));
     setTouchedFields(prev => ({ ...prev, [field]: true }));
     const error = validateField(field, val);
@@ -419,6 +512,29 @@ export default function Home() {
               Historial 📜
             </button>
             
+            {/* Contrast Switcher Button (REQ-IHC-16) */}
+            <button 
+              className="theme-toggle-btn"
+              onClick={toggleTheme}
+              title={theme === "light" ? "Activar modo oscuro" : "Activar modo claro"}
+              aria-label="Cambiar tema de contraste"
+              style={{
+                background: "transparent",
+                border: "1px solid var(--border)",
+                borderRadius: "50%",
+                width: "36px",
+                height: "36px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                fontSize: "1.1rem",
+                color: "var(--header-text)"
+              }}
+            >
+              {theme === "light" ? "🌙" : "☀️"}
+            </button>
+
             <button 
               className="cart-icon-btn" 
               aria-label="Ver Carrito"
@@ -431,6 +547,7 @@ export default function Home() {
                 </span>
               )}
             </button>
+
           </div>
         </div>
       </header>
@@ -729,8 +846,60 @@ export default function Home() {
                   })}
                 </div>
               )}
+              {/* FAQ Accordion Section (REQ-IHC-15) */}
+              <section className="faq-section" style={{ marginTop: "3rem", borderTop: "1px solid var(--border)", paddingTop: "2rem" }}>
+                <h3 style={{ marginBottom: "1rem", color: "var(--text-main)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span>❓ Preguntas Frecuentes (FAQs)</span>
+                </h3>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                  {faqs.map((faq, index) => {
+                    const isOpen = openFaq === index;
+                    return (
+                      <div 
+                        key={index} 
+                        style={{ 
+                          border: "1px solid var(--border)", 
+                          borderRadius: "var(--radius-sm)", 
+                          backgroundColor: "var(--bg-card)", 
+                          overflow: "hidden" 
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setOpenFaq(isOpen ? null : index)}
+                          style={{
+                            width: "100%",
+                            padding: "1rem",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            background: "transparent",
+                            border: "none",
+                            textAlign: "left",
+                            cursor: "pointer",
+                            fontWeight: "500",
+                            color: "var(--text-main)",
+                            fontSize: "0.95rem"
+                          }}
+                        >
+                          <span>{faq.q}</span>
+                          <span style={{ fontSize: "1.2rem", color: "var(--primary)", transition: "transform 0.2s", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}>
+                            ▼
+                          </span>
+                        </button>
+                        {isOpen && (
+                          <div style={{ padding: "0 1rem 1rem 1rem", fontSize: "0.9rem", color: "var(--text-muted)", borderTop: "1px solid var(--border)", paddingTop: "0.5rem" }}>
+                            {faq.a}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
             </>
           )}
+
 
         </section>
 
@@ -872,15 +1041,21 @@ export default function Home() {
                       <input
                         type="text"
                         id="checkout-name"
-                        className={`form-control ${touchedFields.name && formErrors.name ? "is-invalid" : ""}`}
+                        className={`form-control ${getInputBorderClass("name")}`}
                         placeholder="Juan Pérez"
                         value={customer.name}
                         onChange={(e) => handleInputChange("name", e.target.value)}
                         onBlur={(e) => handleInputChange("name", e.target.value)}
                       />
-                      {touchedFields.name && formErrors.name && (
-                        <span className="form-error-msg">{formErrors.name}</span>
-                      )}
+                      {touchedFields.name && (() => {
+                        const info = getFieldStatus("name", customer.name);
+                        const statusColor = info.status === "red" ? "var(--error)" : info.status === "yellow" ? "var(--warning)" : "var(--success)";
+                        return (
+                          <span style={{ color: statusColor, fontSize: "0.8rem", marginTop: "0.2rem", display: "block", fontWeight: "500" }}>
+                            {info.text}
+                          </span>
+                        );
+                      })()}
                     </div>
 
                     {/* Email field */}
@@ -889,15 +1064,21 @@ export default function Home() {
                       <input
                         type="email"
                         id="checkout-email"
-                        className={`form-control ${touchedFields.email && formErrors.email ? "is-invalid" : ""}`}
+                        className={`form-control ${getInputBorderClass("email")}`}
                         placeholder="juan@email.com"
                         value={customer.email}
                         onChange={(e) => handleInputChange("email", e.target.value)}
                         onBlur={(e) => handleInputChange("email", e.target.value)}
                       />
-                      {touchedFields.email && formErrors.email && (
-                        <span className="form-error-msg">{formErrors.email}</span>
-                      )}
+                      {touchedFields.email && (() => {
+                        const info = getFieldStatus("email", customer.email);
+                        const statusColor = info.status === "red" ? "var(--error)" : info.status === "yellow" ? "var(--warning)" : "var(--success)";
+                        return (
+                          <span style={{ color: statusColor, fontSize: "0.8rem", marginTop: "0.2rem", display: "block", fontWeight: "500" }}>
+                            {info.text}
+                          </span>
+                        );
+                      })()}
                     </div>
 
                     {/* Next step button (disabled if personal info invalid) */}
@@ -922,15 +1103,21 @@ export default function Home() {
                       <input
                         type="text"
                         id="checkout-address"
-                        className={`form-control ${touchedFields.address && formErrors.address ? "is-invalid" : ""}`}
+                        className={`form-control ${getInputBorderClass("address")}`}
                         placeholder="Calle Falsa 123, Dpto 4B"
                         value={customer.address}
                         onChange={(e) => handleInputChange("address", e.target.value)}
                         onBlur={(e) => handleInputChange("address", e.target.value)}
                       />
-                      {touchedFields.address && formErrors.address && (
-                        <span className="form-error-msg">{formErrors.address}</span>
-                      )}
+                      {touchedFields.address && (() => {
+                        const info = getFieldStatus("address", customer.address);
+                        const statusColor = info.status === "red" ? "var(--error)" : info.status === "yellow" ? "var(--warning)" : "var(--success)";
+                        return (
+                          <span style={{ color: statusColor, fontSize: "0.8rem", marginTop: "0.2rem", display: "block", fontWeight: "500" }}>
+                            {info.text}
+                          </span>
+                        );
+                      })()}
                     </div>
 
                     {/* City field */}
@@ -939,15 +1126,21 @@ export default function Home() {
                       <input
                         type="text"
                         id="checkout-city"
-                        className={`form-control ${touchedFields.city && formErrors.city ? "is-invalid" : ""}`}
+                        className={`form-control ${getInputBorderClass("city")}`}
                         placeholder="Santiago"
                         value={customer.city}
                         onChange={(e) => handleInputChange("city", e.target.value)}
                         onBlur={(e) => handleInputChange("city", e.target.value)}
                       />
-                      {touchedFields.city && formErrors.city && (
-                        <span className="form-error-msg">{formErrors.city}</span>
-                      )}
+                      {touchedFields.city && (() => {
+                        const info = getFieldStatus("city", customer.city);
+                        const statusColor = info.status === "red" ? "var(--error)" : info.status === "yellow" ? "var(--warning)" : "var(--success)";
+                        return (
+                          <span style={{ color: statusColor, fontSize: "0.8rem", marginTop: "0.2rem", display: "block", fontWeight: "500" }}>
+                            {info.text}
+                          </span>
+                        );
+                      })()}
                     </div>
 
                     {/* Phone field */}
@@ -956,16 +1149,23 @@ export default function Home() {
                       <input
                         type="tel"
                         id="checkout-phone"
-                        className={`form-control ${touchedFields.phone && formErrors.phone ? "is-invalid" : ""}`}
+                        className={`form-control ${getInputBorderClass("phone")}`}
                         placeholder="987654321"
                         value={customer.phone}
                         onChange={(e) => handleInputChange("phone", e.target.value)}
                         onBlur={(e) => handleInputChange("phone", e.target.value)}
                       />
-                      {touchedFields.phone && formErrors.phone && (
-                        <span className="form-error-msg">{formErrors.phone}</span>
-                      )}
+                      {touchedFields.phone && (() => {
+                        const info = getFieldStatus("phone", customer.phone);
+                        const statusColor = info.status === "red" ? "var(--error)" : info.status === "yellow" ? "var(--warning)" : "var(--success)";
+                        return (
+                          <span style={{ color: statusColor, fontSize: "0.8rem", marginTop: "0.2rem", display: "block", fontWeight: "500" }}>
+                            {info.text}
+                          </span>
+                        );
+                      })()}
                     </div>
+
 
                     {/* Coupon Code Input Field */}
                     <div className="form-group">
