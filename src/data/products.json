@@ -328,5 +328,215 @@
       "Voltaje Control": "5V DC"
     },
     "imageUrl": "/images/l298n.svg"
+  },
+  {
+    "id": "prod-023",
+    "name": "Arduino Nano V3.0",
+    "category": "microcontrollers",
+    "price": 4.2,
+    "stock": 30,
+    "description": "Placa de desarrollo ultra compacta basada en el microcontrolador ATmega328P. Ideal para prototipos portátiles y pequeños proyectos de robótica.",
+    "specs": {
+      "Microcontrolador": "ATmega328P",
+      "Voltaje de Entrada": "7V - 12V",
+      "Pines E/S Digitales": "14 pines (6 PWM)",
+      "Entradas Analógicas": "8 pines"
+    },
+    "imageUrl": "/images/arduino.svg"
+  },
+  {
+    "id": "prod-024",
+    "name": "Arduino Mega 2560 R3",
+    "category": "microcontrollers",
+    "price": 15.5,
+    "stock": 12,
+    "description": "Placa de desarrollo de gran formato con 54 pines de entrada/salida digital, diseñada para proyectos que requieren múltiples periféricos y gran capacidad de memoria.",
+    "specs": {
+      "Microcontrolador": "ATmega2560",
+      "Pines E/S Digitales": "54 pines (15 PWM)",
+      "Entradas Analógicas": "16 pines",
+      "Memoria Flash": "256 KB"
+    },
+    "imageUrl": "/images/arduino.svg"
+  },
+  {
+    "id": "prod-025",
+    "name": "Arduino Leonardo",
+    "category": "microcontrollers",
+    "price": 11,
+    "stock": 8,
+    "description": "Placa de desarrollo con comunicación USB nativa integrada (ATmega32u4), lo que permite que sea detectada como teclado o mouse por la computadora.",
+    "specs": {
+      "Microcontrolador": "ATmega32u4",
+      "Conectividad": "Micro USB Nativo",
+      "Pines E/S Digitales": "20 pines (7 PWM)",
+      "Entradas Analógicas": "12 pines"
+    },
+    "imageUrl": "/images/arduino.svg"
+  },
+  {
+    "id": "prod-026",
+    "name": "Módulo ESP32-CAM",
+    "category": "microcontrollers",
+    "price": 9.5,
+    "stock": 6,
+    "description": "Placa de desarrollo muy pequeña con cámara de video OV2640, lector de tarjetas MicroSD externas y conectividad inalámbrica Wi-Fi/Bluetooth integrada.",
+    "specs": {
+      "Sensor Cámara": "OV2640 (2 Megapíxeles)",
+      "SRAM Interna": "520 KB + 4MB PSRAM",
+      "Flash Integrada": "LED Flash Brillante",
+      "Ranura SD": "Soporta MicroSD"
+    },
+    "imageUrl": "/images/esp32.svg"
+  },
+  {
+    "id": "prod-027",
+    "name": "ESP32-S3 DevKitC-1",
+    "category": "microcontrollers",
+    "price": 12.8,
+    "stock": 15,
+    "description": "Placa de desarrollo de última generación con soporte para aceleración de redes neuronales (vector instructions) y funciones criptográficas de hardware.",
+    "specs": {
+      "Procesador": "ESP32-S3 Dual-Core",
+      "Memoria Flash": "8MB Octal SPI",
+      "PSRAM": "2MB",
+      "USB": "Dual USB Type-C"
+    },
+    "imageUrl": "/images/esp32.svg"
+  },
+  {
+    "id": "prod-028",
+    "name": "WeMos D1 Mini ESP8266",
+    "category": "microcontrollers",
+    "price": 3.8,
+    "stock": 25,
+    "description": "Mini placa de desarrollo Wi-Fi compatible con Arduino e ideal para proyectos IoT sumamente pequeños y de bajo consumo energético.",
+    "specs": {
+      "Microcontrolador": "ESP8266EX",
+      "Voltaje de Operación": "3.3V",
+      "Memoria Flash": "4 MB",
+      "Conectividad": "Wi-Fi 802.11 b/g/n"
+    },
+    "imageUrl": "/images/nodemcu_v3.svg"
+  },
+  {
+    "id": "prod-029",
+    "name": "STM32F103C8T6 Blue Pill",
+    "category": "microcontrollers",
+    "price": 5,
+    "stock": 14,
+    "description": "Placa de desarrollo económica basada en arquitectura ARM de 32 bits, ofreciendo un gran rendimiento de cómputo para robots y procesamiento en tiempo real.",
+    "specs": {
+      "Núcleo": "ARM 32-bit Cortex-M3",
+      "Frecuencia Reloj": "72 MHz",
+      "Memoria Flash": "64 KB",
+      "Memoria SRAM": "20 KB"
+    },
+    "imageUrl": "/images/nodemcu.svg"
+  },
+  {
+    "id": "prod-030",
+    "name": "Teensy 4.0 Development Board",
+    "category": "microcontrollers",
+    "price": 24,
+    "stock": 4,
+    "description": "Placa de desarrollo ultra rápida y potente de alto rendimiento que opera a 600 MHz, excelente para procesamiento de audio en tiempo real y cálculo matemático intensivo.",
+    "specs": {
+      "Procesador": "ARM Cortex-M7",
+      "Frecuencia Reloj": "600 MHz",
+      "Memoria Flash": "2048 KB",
+      "Memoria RAM": "1024 KB"
+    },
+    "imageUrl": "/images/pico.svg"
+  },
+  {
+    "id": "prod-031",
+    "name": "ATtiny85 Digispark USB",
+    "category": "microcontrollers",
+    "price": 3,
+    "stock": 2,
+    "description": "Miniatura de placa microcontroladora con conexión USB directa a placa, ideal para proyectos extremadamente pequeños de electrónica de consumo y sensores.",
+    "specs": {
+      "Microcontrolador": "ATtiny85 de 8 bits",
+      "Pines GPIO": "6 pines físicos",
+      "Memoria Flash": "8 KB (2KB para bootloader)",
+      "Conexión": "USB Macho Integrado"
+    },
+    "imageUrl": "/images/nodemcu.svg"
+  },
+  {
+    "id": "prod-032",
+    "name": "Sensor de Temp/Humedad Alta Precisión DHT22",
+    "category": "sensores",
+    "price": 4.50,
+    "stock": 35,
+    "description": "Sensor de temperatura y humedad digital capacitivo de alta precisión para mediciones climáticas de grado profesional en interiores y laboratorios.",
+    "specs": {
+      "Rango Humedad": "0% a 100% HR",
+      "Rango Temperatura": "-40°C a 80°C",
+      "Precisión Humedad": "±2% HR",
+      "Voltaje": "3.3V - 6V DC"
+    },
+    "imageUrl": "/images/dht22.svg"
+  },
+  {
+    "id": "prod-033",
+    "name": "Sensor de Gas y Humo MQ-2",
+    "category": "sensores",
+    "price": 3.20,
+    "stock": 12,
+    "description": "Sensor químico de gas inflamable y humo para sistemas de seguridad industrial y alarmas de detección temprana de incendios o fugas de GLP.",
+    "specs": {
+      "Gases Detectados": "GLP, Butano, Propano, Humo",
+      "Tipo Salida": "Analógica y Digital TTL",
+      "Voltaje Operación": "5V DC",
+      "Tiempo de Respuesta": "Menos de 10s"
+    },
+    "imageUrl": "/images/bh1750.svg"
+  },
+  {
+    "id": "prod-034",
+    "name": "Sensor de Pulso y Oxígeno MAX30102",
+    "category": "sensores",
+    "price": 6.80,
+    "stock": 8,
+    "description": "Módulo biosensor para estimación del ritmo cardíaco y nivel de saturación de oxígeno en sangre (SpO2) a través de fotopletismografía reflectiva.",
+    "specs": {
+      "LEDs de Excitación": "Rojo e Infrarrojo",
+      "Comunicación": "I2C Bus Interface",
+      "Voltaje Operación": "1.8V - 3.3V DC",
+      "Detección": "Sin contacto directo con piel"
+    },
+    "imageUrl": "/images/bmp280.svg"
+  },
+  {
+    "id": "prod-035",
+    "name": "Sensor de Reconocimiento de Color TCS3200",
+    "category": "sensores",
+    "price": 5.50,
+    "stock": 10,
+    "description": "Convertidor de luz a frecuencia que combina fotodiodos de silicio y un convertidor de corriente a frecuencia en un solo circuito integrado de reconocimiento cromático.",
+    "specs": {
+      "Configuración": "Matriz de 8x8 fotodiodos",
+      "Filtros de Color": "Rojo, Verde, Azul y Claro",
+      "Voltaje Operación": "2.7V a 5.5V",
+      "Salida": "Frecuencia con ciclo de 50%"
+    },
+    "imageUrl": "/images/bh1750.svg"
+  },
+  {
+    "id": "prod-036",
+    "name": "Giroscopio y Acelerómetro MPU-6050",
+    "category": "sensores",
+    "price": 3.90,
+    "stock": 20,
+    "description": "Unidad de medición inercial (IMU) de 6 grados de libertad que combina un giroscopio de 3 ejes y un acelerómetro de 3 ejes en un mismo chip con procesador digital de movimiento.",
+    "specs": {
+      "Grados Libertad": "6 DOF",
+      "Resolución ADC": "16 bits por canal",
+      "Rango Giroscopio": "±250, ±500, ±1000, ±2000 °/s",
+      "Comunicación": "Protocolo I2C estándar"
+    },
+    "imageUrl": "/images/bme280.svg"
   }
 ]
