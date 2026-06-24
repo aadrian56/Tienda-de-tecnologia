@@ -1,0 +1,126 @@
+[
+  {
+    "orderId": "ORD-742982",
+    "date": "2026-06-24T03:37:33.496Z",
+    "customer": {
+      "name": "Adrian",
+      "email": "adrian@example.com",
+      "address": "123ASDASDASD",
+      "city": "Macas",
+      "phone": "0979857183"
+    },
+    "items": [
+      {
+        "id": "prod-007",
+        "name": "Router Archer C6 AC1200",
+        "price": 45,
+        "quantity": 2,
+        "subtotal": 90
+      }
+    ],
+    "subtotal": 90,
+    "coupon": "DESCUENTO10",
+    "discount": 9,
+    "total": 81
+  },
+  {
+    "orderId": "ORD-312621",
+    "date": "2026-06-24T03:48:07.464Z",
+    "customer": {
+      "name": "Adrian",
+      "email": "adrian@example.com",
+      "address": "asdasdfasdasdas",
+      "city": "Macas",
+      "phone": "0979857183"
+    },
+    "items": [
+      {
+        "id": "prod-001",
+        "name": "Microcontrolador ESP32-WROOM-32D",
+        "price": 8.5,
+        "quantity": 1,
+        "subtotal": 8.5
+      }
+    ],
+    "subtotal": 8.5,
+    "coupon": "DESCUENTO10",
+    "discount": 0.85,
+    "total": 7.65
+  },
+  {
+    "orderId": "ORD-969046",
+    "date": "2026-06-24T03:53:31.620Z",
+    "customer": {
+      "name": "Adrian",
+      "email": "adrian@example.com",
+      "address": "asdasdfasdasdas",
+      "city": "Macas",
+      "phone": "0979857183"
+    },
+    "items": [
+      {
+        "id": "prod-001",
+        "name": "Microcontrolador ESP32-WROOM-32D",
+        "price": 8.5,
+        "quantity": 1,
+        "subtotal": 8.5
+      },
+      {
+        "id": "prod-002",
+        "name": "Arduino Uno R3",
+        "price": 22,
+        "quantity": 1,
+        "subtotal": 22
+      }
+    ],
+    "subtotal": 30.5,
+    "coupon": "DESCUENTO10",
+    "discount": 3.05,
+    "total": 27.45
+  },
+  {
+    "orderId": "ORD-350193",
+    "date": "2026-06-24T04:18:45.295Z",
+    "customer": {
+      "name": "Adrian",
+      "email": "adrian@example.com",
+      "address": "asdasdfasdasdas",
+      "city": "Macas",
+      "phone": "0979857183"
+    },
+    "items": [
+      {
+        "id": "prod-001",
+        "name": "Microcontrolador ESP32-WROOM-32D",
+        "price": 8.5,
+        "quantity": 1,
+        "subtotal": 8.5
+      },
+      {
+        "id": "prod-007",
+        "name": "Router Archer C6 AC1200",
+        "price": 45,
+        "quantity": 2,
+        "subtotal": 90
+      },
+      {
+        "id": "prod-008",
+        "name": "Switch Gigabit Ethernet de 8 Puertos",
+        "price": 28,
+        "quantity": 2,
+        "subtotal": 56
+      },
+      {
+        "id": "prod-009",
+        "name": "Módulo Inalámbrico NRF24L01+ PA LNA",
+        "price": 5.9,
+        "quantity": 1,
+        "subtotal": 5.9
+      }
+    ],
+    "subtotal": 160.4,
+    "coupon": "DESCUENTO10",
+    "discount": 16.04,
+    "total": 144.36
+  }
+]

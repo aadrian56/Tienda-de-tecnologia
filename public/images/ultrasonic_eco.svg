@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <rect x="10" y="30" width="80" height="40" rx="3" fill="#0f766e" />
+  <circle cx="32" cy="50" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2" />
+  <circle cx="32" cy="50" r="12" fill="#1e293b" />
+  <circle cx="32" cy="50" r="4" fill="#94a3b8" />
+  <circle cx="68" cy="50" r="18" fill="#e2e8f0" stroke="#475569" stroke-width="2" />
+  <circle cx="68" cy="50" r="12" fill="#1e293b" />
+  <circle cx="68" cy="50" r="4" fill="#94a3b8" />
+  <rect x="42" y="70" width="16" height="6" fill="#eab308" />
+  <text x="50" y="24" font-family="'Roboto', sans-serif" font-size="6" font-weight="bold" fill="white" text-anchor="middle">HC-SR04 Eco</text>
+</svg>

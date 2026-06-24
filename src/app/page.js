@@ -1,65 +1,1226 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function Home() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [cart, setCart] = useState([]);
+  const [toasts, setToasts] = useState([]);
+  
+  // Phase 2 states
+  const [activeTab, setActiveTab] = useState("catalog"); // catalog, wishlist, history
+  const [wishlist, setWishlist] = useState([]);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [sortBy, setSortBy] = useState("default"); // default, price-asc, price-desc
+  const [ordersHistory, setOrdersHistory] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+
+  // Coupon State
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState("");
+  const [couponError, setCouponError] = useState("");
+
+  // Checkout Form State (Fase 4 & 6: Steps, IHC Validations & Confirmations)
+  const [checkoutStep, setCheckoutStep] = useState(1); // Step 1 (Personal) or Step 2 (Shipping)
+  const [customer, setCustomer] = useState({
+    name: "",
+    email: "",
+    address: "",
+    city: "",
+    phone: ""
+  });
+  const [formErrors, setFormErrors] = useState({});
+  const [touchedFields, setTouchedFields] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderConfirmation, setOrderConfirmation] = useState(null);
+
+  // IHC Custom States
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [animateBadge, setAnimateBadge] = useState(false);
+  const [showClearCartConfirm, setShowClearCartConfirm] = useState(false);
+
+  // Fetch products
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const res = await fetch("/api/products");
+        if (res.ok) {
+          const data = await res.json();
+          setProducts(data);
+        } else {
+          showToast("Error al cargar componentes", "error");
+        }
+      } catch (error) {
+        showToast("Error de conexión al cargar componentes", "error");
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProducts();
+
+    // Load wishlist from localStorage
+    try {
+      const savedWishlist = localStorage.getItem("wishlist");
+      if (savedWishlist) {
+        setWishlist(JSON.parse(savedWishlist));
+      }
+    } catch (e) {
+      console.error("Error reading wishlist from localStorage", e);
+    }
+
+    // Load cart from localStorage
+    try {
+      const savedCart = localStorage.getItem("cart");
+      if (savedCart) {
+        setCart(JSON.parse(savedCart));
+      }
+    } catch (e) {
+      console.error("Error reading cart from localStorage", e);
+    }
+  }, []);
+
+  // Save wishlist changes
+  useEffect(() => {
+    try {
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    } catch (e) {
+      console.error("Error saving wishlist to localStorage", e);
+    }
+  }, [wishlist]);
+
+  // Save cart changes
+  useEffect(() => {
+    try {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    } catch (e) {
+      console.error("Error saving cart to localStorage", e);
+    }
+  }, [cart]);
+
+  // Handle keydown for accessibility (Escape closes cart and modal confirmations)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsCartOpen(false);
+        setShowClearCartConfirm(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Microinteraction: Animate badge when total items count in cart changes
+  const cartTotalQty = cart.reduce((count, item) => count + item.quantity, 0);
+  useEffect(() => {
+    if (cartTotalQty > 0) {
+      setAnimateBadge(true);
+      const timer = setTimeout(() => setAnimateBadge(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [cartTotalQty]);
+
+  // Load orders history when activeTab becomes "history"
+  useEffect(() => {
+    if (activeTab === "history") {
+      loadOrdersHistory();
+    }
+  }, [activeTab]);
+
+  async function loadOrdersHistory() {
+    setLoadingOrders(true);
+    try {
+      const res = await fetch("/api/orders");
+      if (res.ok) {
+        const data = await res.json();
+        setOrdersHistory(data);
+      } else {
+        showToast("Error al cargar historial de pedidos", "error");
+      }
+    } catch (error) {
+      showToast("Error de conexión al cargar historial", "error");
+    } finally {
+      setLoadingOrders(false);
+    }
+  }
+
+  // Show dynamic toast alerts
+  const showToast = (message, type = "success") => {
+    const id = Date.now() + Math.random().toString(36).substr(2, 9);
+    setToasts((prev) => [...prev, { id, message, type }]);
+    
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 4000);
+  };
+
+  // Add item to cart
+  const addToCart = (product) => {
+    const existingItem = cart.find((item) => item.id === product.id);
+    const currentQty = existingItem ? existingItem.quantity : 0;
+
+    // Strict Frontend Stock Validation
+    if (currentQty >= product.stock) {
+      showToast(`Has alcanzado el límite de stock disponible para este componente.`, "error");
+      return;
+    }
+
+    if (existingItem) {
+      setCart(
+        cart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
+    } else {
+      setCart([...cart, { ...product, quantity: 1 }]);
+    }
+    setIsCartOpen(true);
+    showToast(`¡${product.name} añadido al carrito!`, "success");
+  };
+
+  // Update item quantity in cart
+  const updateQuantity = (productId, amount) => {
+    const product = products.find((p) => p.id === productId);
+    if (!product) return;
+
+    setCart(
+      cart
+        .map((item) => {
+          if (item.id === productId) {
+            const newQty = item.quantity + amount;
+            
+            // Check boundaries
+            if (newQty <= 0) return null;
+            if (newQty > product.stock) {
+              showToast("Has alcanzado el límite de stock disponible para este componente.", "error");
+              return item;
+            }
+            return { ...item, quantity: newQty };
+          }
+          return item;
+        })
+        .filter(Boolean)
+    );
+  };
+
+  // Remove item from cart
+  const removeFromCart = (productId) => {
+    const item = cart.find((i) => i.id === productId);
+    setCart(cart.filter((item) => item.id !== productId));
+    if (item) {
+      showToast(`Eliminado: ${item.name}`, "error");
+    }
+  };
+
+  // Toggle Favorite in Wishlist
+  const toggleWishlist = (productId) => {
+    if (wishlist.includes(productId)) {
+      setWishlist(wishlist.filter((id) => id !== productId));
+      showToast("Eliminado de la lista de deseos.", "error");
+    } else {
+      setWishlist([...wishlist, productId]);
+      showToast("Agregado a la lista de deseos ❤️", "success");
+    }
+  };
+
+  // Apply Coupon Code
+  const handleApplyCoupon = () => {
+    const code = couponInput.trim();
+    if (code === "") {
+      setAppliedCoupon("");
+      setCouponError("");
+      return;
+    }
+    if (code === "DESCUENTO10") {
+      setAppliedCoupon("DESCUENTO10");
+      setCouponError("");
+      showToast("Cupón DESCUENTO10 aplicado: 10% de descuento.", "success");
+    } else {
+      setAppliedCoupon("");
+      setCouponError("Cupón inválido o no reconocido.");
+      showToast("El cupón ingresado no es válido.", "error");
+    }
+  };
+
+  // Calculate Totals and Discounts
+  const cartSubtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const discount = appliedCoupon === "DESCUENTO10" ? cartSubtotal * 0.10 : 0;
+  const cartTotal = cartSubtotal - discount;
+
+  const validateField = (field, val) => {
+    let error = "";
+    if (field === "name") {
+      if (val.trim().length === 0) error = "El nombre es obligatorio.";
+      else if (val.trim().length < 3) error = "El nombre debe tener al menos 3 caracteres.";
+    } else if (field === "email") {
+      if (val.trim().length === 0) error = "El correo electrónico es obligatorio.";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) error = "Formato de correo electrónico inválido.";
+    } else if (field === "address") {
+      if (val.trim().length === 0) error = "La dirección es obligatoria.";
+      else if (val.trim().length < 10) error = "La dirección debe tener al menos 10 caracteres.";
+    } else if (field === "city") {
+      if (val.trim().length === 0) error = "La ciudad es obligatoria.";
+    } else if (field === "phone") {
+      const digits = val.replace(/\D/g, "");
+      if (val.trim().length === 0) error = "El número de teléfono es obligatorio.";
+      else if (digits.length < 7 || digits.length > 10) error = "El teléfono debe tener entre 7 y 10 dígitos.";
+    }
+    return error;
+  };
+
+  const handleInputChange = (field, val) => {
+    setCustomer(prev => ({ ...prev, [field]: val }));
+    setTouchedFields(prev => ({ ...prev, [field]: true }));
+    const error = validateField(field, val);
+    setFormErrors(prev => ({ ...prev, [field]: error }));
+  };
+
+  // Active validation states for steps (UX prevention)
+  const isStep1Valid = customer.name.trim().length >= 3 && 
+                        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email);
+
+  const phoneDigits = customer.phone.replace(/\D/g, "");
+  const isStep2Valid = customer.address.trim().length >= 10 && 
+                        customer.city.trim() !== "" && 
+                        phoneDigits.length >= 7 && 
+                        phoneDigits.length <= 10;
+
+  // Handle Checkout submission
+  const handleCheckout = async (e) => {
+    e.preventDefault();
+    
+    if (!isStep1Valid || !isStep2Valid) {
+      showToast("Por favor, completa los campos requeridos correctamente.", "error");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cart: cart.map((item) => ({ id: item.id, quantity: item.quantity })),
+          customer,
+          coupon: appliedCoupon
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setOrderConfirmation(data.order);
+        // Refresh products list with updated backend stock
+        setProducts(data.updatedProducts);
+        // Clear cart and customer info
+        setCart([]);
+        setCustomer({ name: "", email: "", address: "", city: "", phone: "" });
+        setCouponInput("");
+        setAppliedCoupon("");
+        setCouponError("");
+        setFormErrors({});
+        setCheckoutStep(1); // Reset step back to 1
+        showToast("¡Compra procesada con éxito!", "success");
+      } else {
+        showToast(data.error || "Ocurrió un error al procesar la compra.", "error");
+      }
+    } catch (error) {
+      showToast("Error de conexión al procesar el pedido.", "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Filter products on frontend with category, search query, minPrice, and maxPrice concurrently
+  let filteredProducts = products.filter((p) => {
+    const matchesCategory = activeCategory === "all" || 
+                            p.category === activeCategory ||
+                            (activeCategory === "sensors" && p.category === "sensores") ||
+                            (activeCategory === "routers" && p.category === "networks");
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          p.description.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const minVal = parseFloat(minPrice);
+    const matchesMinPrice = isNaN(minVal) || p.price >= minVal;
+
+    const maxVal = parseFloat(maxPrice);
+    const matchesMaxPrice = isNaN(maxVal) || p.price <= maxVal;
+
+    const isFavorite = activeTab === "wishlist" ? wishlist.includes(p.id) : true;
+
+    return matchesCategory && matchesSearch && matchesMinPrice && matchesMaxPrice && isFavorite;
+  });
+
+  // Sort products
+  if (sortBy === "price-asc") {
+    filteredProducts.sort((a, b) => a.price - b.price);
+  } else if (sortBy === "price-desc") {
+    filteredProducts.sort((a, b) => b.price - a.price);
+  }
+
+  const categories = [
+    { id: "all", label: "Todos" },
+    { id: "microcontrollers", label: "Microcontroladores" },
+    { id: "sensors", label: "Sensores" },
+    { id: "routers", label: "Redes" }
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="app-container">
+      {/* Toast Alert Notifications */}
+      <div className="toast-container hide-on-print">
+        {toasts.map((toast) => (
+          <div key={toast.id} className={`toast ${toast.type}`}>
+            <span className="toast-icon">
+              {toast.type === "success" ? "✓" : "⚠"}
+            </span>
+            <span>{toast.message}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Main Header */}
+      <header className="main-header hide-on-print">
+        <div className="header-content">
+          <div className="logo" onClick={() => { setActiveTab("catalog"); setCheckoutStep(1); }} style={{ cursor: "pointer" }}>
+            <span className="logo-icon">⚡</span>
+            <span>ElectroMart</span>
+          </div>
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+            {/* Tab Navigation buttons */}
+            <button 
+              className={`filter-btn ${activeTab === "catalog" ? "active" : ""}`}
+              onClick={() => setActiveTab("catalog")}
+              style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "catalog" ? "none" : "1px solid var(--border)" }}
+            >
+              Catálogo 📦
+            </button>
+            <button 
+              className={`filter-btn ${activeTab === "wishlist" ? "active" : ""}`}
+              onClick={() => setActiveTab("wishlist")}
+              style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "wishlist" ? "none" : "1px solid var(--border)" }}
+            >
+              Favoritos ❤️
+              {wishlist.length > 0 && <span style={{ marginLeft: "4px", fontSize: "0.80rem" }}>({wishlist.length})</span>}
+            </button>
+            <button 
+              className={`filter-btn ${activeTab === "history" ? "active" : ""}`}
+              onClick={() => setActiveTab("history")}
+              style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "history" ? "none" : "1px solid var(--border)" }}
+            >
+              Historial 📜
+            </button>
+            
+            <button 
+              className="cart-icon-btn" 
+              aria-label="Ver Carrito"
+              onClick={() => setIsCartOpen(!isCartOpen)}
+            >
+              🛒
+              {cart.length > 0 && (
+                <span className={`cart-badge ${animateBadge ? "animate" : ""}`}>
+                  {cart.reduce((count, item) => count + item.quantity, 0)}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="hero hide-on-print">
+        <div className="hero-content">
+          <h2>Tecnología para Prototipado y Proyectos</h2>
+          <p>La tienda ideal para estudiantes, ingenieros y aficionados a la electrónica.</p>
+        </div>
+      </section>
+
+      {/* Main Container */}
+      <main className="main-content hide-on-print">
+        
+        {/* Left Column: Tab Views */}
+        <section className="catalog-section">
+          
+          {activeTab === "history" ? (
+            /* Order History Tab View */
+            <div style={{ backgroundColor: "var(--bg-card)", padding: "1.5rem", borderRadius: "var(--radius)", border: "1px solid var(--border)", boxShadow: "var(--shadow)" }}>
+              <h3 style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span>📜 Historial de Pedidos</span>
+              </h3>
+              
+              {loadingOrders ? (
+                <div style={{ textAlign: "center", padding: "3rem", color: "var(--text-muted)" }}>
+                  <h4>Cargando historial de pedidos...</h4>
+                </div>
+              ) : ordersHistory.length === 0 ? (
+                <div style={{ textAlign: "center", padding: "3rem", color: "var(--text-muted)" }}>
+                  <p>No se han registrado compras anteriores en este servidor.</p>
+                </div>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                  {ordersHistory.map((order) => (
+                    <div key={order.orderId} style={{ border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", padding: "1rem", backgroundColor: "rgba(0,0,0,0.01)" }}>
+                      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", marginBottom: "0.5rem", borderBottom: "1px solid var(--border)", paddingBottom: "0.5rem" }}>
+                        <div>
+                          <strong>Pedido: {order.orderId}</strong>
+                          <div style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
+                            Fecha: {new Date(order.date).toLocaleString()}
+                          </div>
+                        </div>
+                        <div style={{ textAlign: "right" }}>
+                          <span style={{ fontWeight: "700", color: "var(--primary)" }}>Total: ${order.total.toFixed(2)}</span>
+                          {order.discount > 0 && (
+                            <div style={{ fontSize: "0.75rem", color: "var(--secondary)" }}>
+                              Ahorro: -${order.discount.toFixed(2)} ({order.coupon})
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Products List in Order */}
+                      <div style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
+                        {order.items.map((item) => (
+                          <div key={item.id} style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.2rem" }}>
+                            <span>• {item.name} <strong>(x{item.quantity})</strong></span>
+                            <span>${item.subtotal.toFixed(2)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            /* Catalog / Wishlist View */
+            <>
+              {/* Breadcrumbs Navigation */}
+              <nav className="breadcrumbs hide-on-print" aria-label="Navegación de migas de pan" style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "1rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <span onClick={() => { setActiveTab("catalog"); setActiveCategory("all"); }} style={{ cursor: "pointer", textDecoration: "underline" }} title="Ir al Inicio">Inicio</span>
+                <span>/</span>
+                <span onClick={() => { setActiveTab("catalog"); }} style={{ cursor: "pointer" }} title="Ver todo el Catálogo">Catálogo</span>
+                <span>/</span>
+                <span style={{ fontWeight: "bold", color: "var(--text-main)" }}>
+                  {activeCategory === "all" ? "Todos los componentes" : categories.find(c => c.id === activeCategory)?.label}
+                </span>
+              </nav>
+
+              {/* Controls Bar: Category Filters & Search Input */}
+              <div className="controls-bar" style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1.5rem" }}>
+                
+                {/* Search & Category Filter Row */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center", justifyContent: "space-between" }}>
+                  <div className="filter-bar" style={{ margin: 0, padding: 0 }}>
+                    {categories.map((cat) => (
+                      <button
+                        key={cat.id}
+                        className={`filter-btn ${activeCategory === cat.id ? "active" : ""}`}
+                        onClick={() => setActiveCategory(cat.id)}
+                        title={`Filtrar componentes por ${cat.label}`}
+                      >
+                        {cat.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Real-time Search Input */}
+                  <div className="search-wrapper" style={{ position: "relative", flex: "1 1 240px", maxWidth: "320px" }}>
+                    <input
+                      type="text"
+                      placeholder="Buscar componente..."
+                      className="form-control"
+                      style={{ width: "100%", paddingLeft: "2.2rem", borderRadius: "20px" }}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      title="Escribe para buscar componentes en tiempo real"
+                    />
+                    <span style={{ position: "absolute", left: "0.8rem", top: "50%", transform: "translateY(-50%)", opacity: 0.5 }}>🔍</span>
+                    {searchQuery && (
+                      <button 
+                        onClick={() => setSearchQuery("")}
+                        style={{ position: "absolute", right: "0.8rem", top: "50%", transform: "translateY(-50%)", border: "none", background: "transparent", cursor: "pointer", fontSize: "0.9rem", color: "var(--text-muted)" }}
+                        title="Limpiar búsqueda actual"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Advanced Filters Row: Price Ranges & Sorting */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center", backgroundColor: "var(--bg-card)", padding: "1rem", borderRadius: "var(--radius-sm)", border: "1px solid var(--border)" }}>
+                  
+                  {/* Min Price */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <label style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: "500" }}>P. Mín ($):</label>
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      className="form-control"
+                      style={{ width: "80px", padding: "0.35rem 0.5rem", borderRadius: "6px" }}
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Max Price */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <label style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: "500" }}>P. Máx ($):</label>
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      className="form-control"
+                      style={{ width: "80px", padding: "0.35rem 0.5rem", borderRadius: "6px" }}
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Clear Ranges button */}
+                  {(minPrice || maxPrice) && (
+                    <button
+                      className="filter-btn"
+                      style={{ padding: "0.35rem 0.75rem", borderRadius: "8px", fontSize: "0.75rem" }}
+                      onClick={() => { setMinPrice(""); setMaxPrice(""); }}
+                    >
+                      Limpiar Precios
+                    </button>
+                  )}
+
+                  {/* Sorting dropdown */}
+                  <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <label style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: "500" }}>Ordenar por:</label>
+                    <select
+                      className="form-control"
+                      style={{ padding: "0.35rem 0.5rem", borderRadius: "6px", cursor: "pointer" }}
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                    >
+                      <option value="default">Relevancia</option>
+                      <option value="price-asc">Precio: Menor a Mayor</option>
+                      <option value="price-desc">Precio: Mayor a Menor</option>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+
+              {loading ? (
+                <div style={{ textAlign: "center", padding: "3rem", color: "var(--text-muted)" }}>
+                  <h3>Cargando catálogo...</h3>
+                </div>
+              ) : filteredProducts.length === 0 ? (
+                <div style={{ textAlign: "center", padding: "3rem", color: "var(--text-muted)" }}>
+                  <h3>No se encontraron componentes en esta vista.</h3>
+                  <p style={{ fontSize: "0.9rem", color: "var(--text-muted)" }}>Intenta cambiar los filtros, precios o tu búsqueda.</p>
+                </div>
+              ) : (
+                <div className="products-grid">
+                  {filteredProducts.map((product) => {
+                    const cartItem = cart.find((item) => item.id === product.id);
+                    const cartQty = cartItem ? cartItem.quantity : 0;
+                    const isOutOfStock = product.stock <= 0;
+                    const isLimitReached = cartQty >= product.stock;
+                    const isFavorited = wishlist.includes(product.id);
+
+                    return (
+                      <article key={product.id} className="product-card">
+                        {/* Wishlist Heart Button */}
+                        <button
+                          className="wishlist-btn"
+                          aria-label={isFavorited ? "Quitar de favoritos" : "Guardar en favoritos"}
+                          title={isFavorited ? "Eliminar de favoritos" : "Agregar a favoritos"}
+                          onClick={() => toggleWishlist(product.id)}
+                          style={{
+                            position: "absolute",
+                            top: "10px",
+                            right: "10px",
+                            zIndex: 10,
+                            background: "var(--bg-card)",
+                            border: "1px solid var(--border)",
+                            borderRadius: "50%",
+                            width: "36px",
+                            height: "36px",
+                            cursor: "pointer",
+                            fontSize: "1.1rem",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                            transition: "transform 0.2s ease"
+                          }}
+                        >
+                          {isFavorited ? "❤️" : "🤍"}
+                        </button>
+
+                        {/* SVG Image Container */}
+                        <div className="product-image-container">
+                          <div className="product-image-placeholder">
+                            <Image
+                              src={product.imageUrl}
+                              alt={product.name}
+                              width={120}
+                              height={120}
+                              style={{ objectFit: "contain" }}
+                              priority={product.id === "prod-001"}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="product-card-body">
+                          <span className="product-category">
+                            {product.category === "microcontrollers" ? "Microcontrolador" : product.category === "sensors" ? "Sensor" : "Redes / Routers"}
+                          </span>
+                          <h3 className="product-name">{product.name}</h3>
+                          <p className="product-description">{product.description}</p>
+
+                          {/* Technical Specs */}
+                          <div className="product-specs">
+                            {Object.entries(product.specs).slice(0, 4).map(([key, val]) => (
+                              <div className="spec-item" key={key}>
+                                <span className="spec-label">{key}</span>
+                                <span className="spec-val" title={val}>{val}</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Stock and Price Footer */}
+                          <div className="product-footer">
+                            <div>
+                              <div className="product-price">${product.price.toFixed(2)}</div>
+                              
+                              {/* Stock and Critical Stock Warning Labels */}
+                              {isOutOfStock ? (
+                                <span className="stock-tag out-of-stock">Agotado</span>
+                              ) : product.stock <= 3 ? (
+                                <span className="stock-tag critical-stock" title="Pocas unidades en inventario">
+                                  ⚠️ ¡Últimas unidades! (Quedan {product.stock})
+                                </span>
+                              ) : (
+                                <span className="stock-tag in-stock">{product.stock} disponibles</span>
+                              )}
+                            </div>
+
+                            {/* Add to Cart button disabled when stock is reached */}
+                            <button
+                              className="action-btn"
+                              disabled={isOutOfStock || isLimitReached}
+                              onClick={() => addToCart(product)}
+                            >
+                              {isOutOfStock 
+                                ? "Agotado" 
+                                : isLimitReached 
+                                  ? "Límite" 
+                                  : "Añadir 🛒"
+                              }
+                            </button>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              )}
+            </>
+          )}
+
+        </section>
+
+        {/* Right Column: Cart and Checkout */}
+        {/* Drawer Overlay */}
+        <div 
+          className={`cart-sidebar-overlay hide-on-print ${isCartOpen ? "open" : ""}`} 
+          onClick={() => setIsCartOpen(false)} 
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+
+        {/* Right Column: Cart and Checkout (Styled as Drawer) */}
+        <section id="cart-section" className={`cart-sidebar hide-on-print ${isCartOpen ? "open" : ""}`}>
+          <h3 className="cart-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span>🛒 Tu Carrito</span>
+            <button 
+              type="button" 
+              className="cart-close-btn"
+              onClick={() => setIsCartOpen(false)}
+              aria-label="Cerrar carrito"
+              style={{ background: "transparent", border: "none", fontSize: "1.5rem", cursor: "pointer", color: "var(--text-main)", display: "flex", alignItems: "center", justifyContent: "center" }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+              ✕
+            </button>
+          </h3>
+
+          {cart.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "2rem 0", color: "var(--text-muted)" }}>
+              <p>Tu carrito está vacío.</p>
+              <p style={{ fontSize: "0.8rem", marginTop: "0.5rem" }}>¡Agrega componentes electrónicos para empezar!</p>
+            </div>
+          ) : (
+            <>
+              {/* Cart Actions */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem", paddingBottom: "0.5rem", borderBottom: "1px solid var(--border)" }}>
+                <span style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>{cart.length} componentes</span>
+                <button
+                  type="button"
+                  className="filter-btn"
+                  style={{ padding: "0.25rem 0.5rem", borderRadius: "8px", fontSize: "0.75rem", color: "var(--error)", borderColor: "var(--error)", margin: 0 }}
+                  onClick={() => setShowClearCartConfirm(true)}
+                  title="Vaciar todos los artículos del carrito"
+                >
+                  Vaciar Carrito 🗑️
+                </button>
+              </div>
+              {/* Cart Items List */}
+              <div className="cart-items-list">
+                {cart.map((item) => {
+                  const dbProduct = products.find((p) => p.id === item.id);
+                  const maxStock = dbProduct ? dbProduct.stock : item.quantity;
+                  const isPlusDisabled = item.quantity >= maxStock;
+
+                  return (
+                    <div key={item.id} className="cart-item">
+                      <div className="cart-item-info">
+                        <div className="cart-item-name">{item.name}</div>
+                        <div className="cart-item-price">
+                          ${item.price.toFixed(2)} c/u • Subtotal: ${(item.price * item.quantity).toFixed(2)}
+                        </div>
+                      </div>
+                      
+                      {/* Plus and Minus Controls with Live Stock Block */}
+                      <div className="cart-item-controls">
+                        <button
+                          className="quantity-btn"
+                          aria-label="Disminuir cantidad"
+                          title="Disminuir cantidad"
+                          onClick={() => updateQuantity(item.id, -1)}
+                        >
+                          -
+                        </button>
+                        <span className="cart-item-qty">{item.quantity}</span>
+                        <button
+                          className="quantity-btn"
+                          aria-label="Incrementar cantidad"
+                          title="Incrementar cantidad"
+                          disabled={isPlusDisabled}
+                          onClick={() => updateQuantity(item.id, 1)}
+                        >
+                          +
+                        </button>
+                        <button
+                          className="cart-item-remove"
+                          aria-label="Quitar artículo"
+                          title="Eliminar este artículo del carrito"
+                          onClick={() => removeFromCart(item.id)}
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Cart Summary */}
+              <div className="cart-summary">
+                <div className="summary-row">
+                  <span>Subtotal:</span>
+                  <span>${cartSubtotal.toFixed(2)}</span>
+                </div>
+                
+                {/* Coupon Discount Details */}
+                {appliedCoupon === "DESCUENTO10" && (
+                  <div className="summary-row" style={{ color: "var(--secondary)", fontWeight: "500" }}>
+                    <span>Descuento (Cupón: DESCUENTO10):</span>
+                    <span>-${discount.toFixed(2)}</span>
+                  </div>
+                )}
+                
+                <div className="summary-row total">
+                  <span>Total:</span>
+                  <span>${cartTotal.toFixed(2)}</span>
+                </div>
+              </div>
+
+              {/* Checkout Form (Fase 4: steps checkout layout) */}
+              <form className="checkout-form" onSubmit={handleCheckout} noValidate>
+                <h4 style={{ marginBottom: "1rem" }}>Proceso de Compra</h4>
+
+                {/* Progress bar visual indicator */}
+                <div className="steps-indicator">
+                  <div className={`step-node ${checkoutStep >= 1 ? (checkoutStep > 1 ? "completed" : "active") : ""}`}>
+                    {checkoutStep > 1 ? "✓" : "1"}
+                    <span className="step-label" style={{ left: 0 }}>1. Datos</span>
+                  </div>
+                  <div className={`step-node ${checkoutStep === 2 ? "active" : ""}`}>
+                    2
+                    <span className="step-label" style={{ right: 0 }}>2. Envío</span>
+                  </div>
+                </div>
+
+                {/* STEP 1: Personal Details */}
+                {checkoutStep === 1 && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "1rem" }}>
+                    {/* Name field */}
+                    <div className="form-group">
+                      <label htmlFor="checkout-name">Nombre Completo *</label>
+                      <input
+                        type="text"
+                        id="checkout-name"
+                        className={`form-control ${touchedFields.name && formErrors.name ? "is-invalid" : ""}`}
+                        placeholder="Juan Pérez"
+                        value={customer.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
+                        onBlur={(e) => handleInputChange("name", e.target.value)}
+                      />
+                      {touchedFields.name && formErrors.name && (
+                        <span className="form-error-msg">{formErrors.name}</span>
+                      )}
+                    </div>
+
+                    {/* Email field */}
+                    <div className="form-group">
+                      <label htmlFor="checkout-email">Correo Electrónico *</label>
+                      <input
+                        type="email"
+                        id="checkout-email"
+                        className={`form-control ${touchedFields.email && formErrors.email ? "is-invalid" : ""}`}
+                        placeholder="juan@email.com"
+                        value={customer.email}
+                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        onBlur={(e) => handleInputChange("email", e.target.value)}
+                      />
+                      {touchedFields.email && formErrors.email && (
+                        <span className="form-error-msg">{formErrors.email}</span>
+                      )}
+                    </div>
+
+                    {/* Next step button (disabled if personal info invalid) */}
+                    <button
+                      type="button"
+                      className="checkout-submit-btn"
+                      style={{ marginTop: "0.5rem" }}
+                      disabled={!isStep1Valid}
+                      onClick={() => setCheckoutStep(2)}
+                    >
+                      Siguiente Paso ➡️
+                    </button>
+                  </div>
+                )}
+
+                {/* STEP 2: Shipping details and Checkout button */}
+                {checkoutStep === 2 && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "1rem" }}>
+                    {/* Address field */}
+                    <div className="form-group">
+                      <label htmlFor="checkout-address">Dirección *</label>
+                      <input
+                        type="text"
+                        id="checkout-address"
+                        className={`form-control ${touchedFields.address && formErrors.address ? "is-invalid" : ""}`}
+                        placeholder="Calle Falsa 123, Dpto 4B"
+                        value={customer.address}
+                        onChange={(e) => handleInputChange("address", e.target.value)}
+                        onBlur={(e) => handleInputChange("address", e.target.value)}
+                      />
+                      {touchedFields.address && formErrors.address && (
+                        <span className="form-error-msg">{formErrors.address}</span>
+                      )}
+                    </div>
+
+                    {/* City field */}
+                    <div className="form-group">
+                      <label htmlFor="checkout-city">Ciudad *</label>
+                      <input
+                        type="text"
+                        id="checkout-city"
+                        className={`form-control ${touchedFields.city && formErrors.city ? "is-invalid" : ""}`}
+                        placeholder="Santiago"
+                        value={customer.city}
+                        onChange={(e) => handleInputChange("city", e.target.value)}
+                        onBlur={(e) => handleInputChange("city", e.target.value)}
+                      />
+                      {touchedFields.city && formErrors.city && (
+                        <span className="form-error-msg">{formErrors.city}</span>
+                      )}
+                    </div>
+
+                    {/* Phone field */}
+                    <div className="form-group">
+                      <label htmlFor="checkout-phone">Número de Teléfono *</label>
+                      <input
+                        type="tel"
+                        id="checkout-phone"
+                        className={`form-control ${touchedFields.phone && formErrors.phone ? "is-invalid" : ""}`}
+                        placeholder="987654321"
+                        value={customer.phone}
+                        onChange={(e) => handleInputChange("phone", e.target.value)}
+                        onBlur={(e) => handleInputChange("phone", e.target.value)}
+                      />
+                      {touchedFields.phone && formErrors.phone && (
+                        <span className="form-error-msg">{formErrors.phone}</span>
+                      )}
+                    </div>
+
+                    {/* Coupon Code Input Field */}
+                    <div className="form-group">
+                      <label htmlFor="checkout-coupon">Cupón de Descuento</label>
+                      <div style={{ display: "flex", gap: "0.5rem" }}>
+                        <input
+                          type="text"
+                          id="checkout-coupon"
+                          className="form-control"
+                          placeholder="Ej: DESCUENTO10"
+                          style={{ flex: 1, textTransform: "uppercase" }}
+                          value={couponInput}
+                          onChange={(e) => setCouponInput(e.target.value)}
+                        />
+                        <button
+                          type="button"
+                          className="filter-btn"
+                          style={{ padding: "0 1rem", borderRadius: "var(--radius-sm)", margin: 0 }}
+                          onClick={handleApplyCoupon}
+                        >
+                          Aplicar
+                        </button>
+                      </div>
+                      {appliedCoupon && (
+                        <span style={{ color: "var(--secondary)", fontSize: "0.8rem", marginTop: "0.2rem", display: "block" }}>
+                          ✓ Cupón activo: 10% de descuento.
+                        </span>
+                      )}
+                      {couponError && (
+                        <span className="form-error-msg" style={{ display: "block" }}>
+                          {couponError}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Back & Submit Row */}
+                    <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}>
+                      <button
+                        type="button"
+                        className="filter-btn"
+                        style={{ padding: "0.85rem 1rem", borderRadius: "var(--radius-sm)", margin: 0 }}
+                        onClick={() => setCheckoutStep(1)}
+                      >
+                        ⬅️ Atrás
+                      </button>
+                      <button
+                        type="submit"
+                        className="checkout-submit-btn"
+                        style={{ margin: 0, flex: 1 }}
+                        disabled={!isStep2Valid || isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+                            <span className="spinner"></span>
+                            <span>Procesando...</span>
+                          </div>
+                        ) : (
+                          "Realizar Compra 🚀"
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </form>
+            </>
+          )}
+        </section>
       </main>
+
+      {/* Confirmation Modal for Clear Cart */}
+      {showClearCartConfirm && (
+        <div className="modal-overlay hide-on-print" onClick={() => setShowClearCartConfirm(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "400px" }}>
+            <div className="modal-header">
+              <div className="modal-icon-success" style={{ backgroundColor: "rgba(207, 102, 121, 0.15)", color: "var(--error)", margin: "0 auto 1rem" }}>⚠️</div>
+              <h2 style={{ textAlign: "center" }}>¿Vaciar Carrito?</h2>
+              <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", marginTop: "0.25rem", textAlign: "center" }}>
+                Esta acción eliminará todos los componentes que has seleccionado de tu pedido. ¿Estás seguro?
+              </p>
+            </div>
+            <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+              <button 
+                className="close-modal-btn" 
+                style={{ flex: 1, backgroundColor: "var(--error)", color: "white", fontWeight: "700" }}
+                onClick={() => {
+                  setCart([]);
+                  setShowClearCartConfirm(false);
+                  showToast("Carrito vaciado correctamente.", "error");
+                }}
+              >
+                Sí, vaciar
+              </button>
+              <button 
+                className="close-modal-btn" 
+                style={{ flex: 1, backgroundColor: "var(--border)", color: "var(--text-main)" }}
+                onClick={() => setShowClearCartConfirm(false)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Checkout Order Confirmation Dialog */}
+      {orderConfirmation && (
+        <div className="modal-overlay hide-on-print">
+          <div className="modal-content">
+            <div className="modal-header">
+              <div className="modal-icon-success">✓</div>
+              <h2>¡Compra Confirmada!</h2>
+              <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", marginTop: "0.25rem" }}>
+                Pedido registrado con ID: <strong>{orderConfirmation.orderId}</strong>
+              </p>
+            </div>
+
+            <div className="modal-details">
+              <h4>Resumen del Envío</h4>
+              <div className="modal-details-row">
+                <span>Cliente:</span>
+                <strong>{orderConfirmation.customer.name}</strong>
+              </div>
+              <div className="modal-details-row">
+                <span>Dirección:</span>
+                <span>{orderConfirmation.customer.address}, {orderConfirmation.customer.city}</span>
+              </div>
+              <div className="modal-details-row">
+                <span>Teléfono:</span>
+                <span>{orderConfirmation.customer.phone}</span>
+              </div>
+            </div>
+
+            <div className="modal-details">
+              <h4>Artículos</h4>
+              {orderConfirmation.items.map((item) => (
+                <div key={item.id} className="modal-details-row" style={{ fontSize: "0.85rem", marginBottom: "0.25rem" }}>
+                  <span>{item.name} (x{item.quantity})</span>
+                  <span>${item.subtotal.toFixed(2)}</span>
+                </div>
+              ))}
+              
+              <div className="modal-details-row" style={{ borderTop: "1px solid var(--border)", paddingTop: "0.5rem", marginTop: "0.5rem" }}>
+                <span>Subtotal:</span>
+                <span>${orderConfirmation.subtotal.toFixed(2)}</span>
+              </div>
+              
+              {orderConfirmation.coupon && (
+                <div className="modal-details-row" style={{ color: "var(--secondary)" }}>
+                  <span>Cupón ({orderConfirmation.coupon}):</span>
+                  <span>-${orderConfirmation.discount.toFixed(2)}</span>
+                </div>
+              )}
+              
+              <div className="modal-details-row" style={{ fontWeight: "700", fontSize: "1.05rem" }}>
+                <span>Total pagado:</span>
+                <span style={{ color: "var(--primary)" }}>${orderConfirmation.total.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+              <button 
+                className="close-modal-btn" 
+                style={{ flex: 1, backgroundColor: "var(--secondary)", color: "#000000", fontWeight: "700" }}
+                onClick={() => window.print()}
+              >
+                Imprimir Recibo 🖨️
+              </button>
+              <button 
+                className="close-modal-btn" 
+                style={{ flex: 1 }}
+                onClick={() => {
+                  setOrderConfirmation(null);
+                  loadOrdersHistory();
+                }}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden Printable Invoice Section for @media print */}
+      {orderConfirmation && (
+        <div className="print-invoice-container print-only">
+          <div className="print-header" style={{ borderBottom: "2px solid #333", paddingBottom: "1rem", marginBottom: "1.5rem" }}>
+            <h1 style={{ color: "#6200EE", fontSize: "2rem", margin: 0 }}>ELECTROMART</h1>
+            <p style={{ margin: "0.2rem 0", fontSize: "0.9rem" }}>Tienda de Componentes Electrónicos y Tecnológicos</p>
+            <div style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between", fontSize: "0.9rem" }}>
+              <span><strong>ID de Orden:</strong> {orderConfirmation.orderId}</span>
+              <span><strong>Fecha:</strong> {new Date(orderConfirmation.date).toLocaleString()}</span>
+            </div>
+          </div>
+          
+          <div className="print-section" style={{ marginBottom: "1.5rem" }}>
+            <h3 style={{ borderBottom: "1px solid #ddd", paddingBottom: "0.25rem", marginBottom: "0.5rem" }}>Datos de Envío del Cliente</h3>
+            <p style={{ margin: "0.2rem 0" }}><strong>Nombre Completo:</strong> {orderConfirmation.customer.name}</p>
+            <p style={{ margin: "0.2rem 0" }}><strong>Correo Electrónico:</strong> {orderConfirmation.customer.email}</p>
+            <p style={{ margin: "0.2rem 0" }}><strong>Dirección Destino:</strong> {orderConfirmation.customer.address}, {orderConfirmation.customer.city}</p>
+            <p style={{ margin: "0.2rem 0" }}><strong>Teléfono de Contacto:</strong> {orderConfirmation.customer.phone}</p>
+          </div>
+          
+          <div className="print-section" style={{ marginBottom: "1.5rem" }}>
+            <h3 style={{ borderBottom: "1px solid #ddd", paddingBottom: "0.25rem", marginBottom: "0.5rem" }}>Desglose de Productos</h3>
+            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: "0.95rem" }}>
+              <thead>
+                <tr style={{ borderBottom: "2px solid #333" }}>
+                  <th style={{ padding: "0.5rem 0" }}>Descripción del Componente</th>
+                  <th style={{ padding: "0.5rem 0", textAlign: "center" }}>Cantidad</th>
+                  <th style={{ padding: "0.5rem 0", textAlign: "right" }}>Precio Unitario</th>
+                  <th style={{ padding: "0.5rem 0", textAlign: "right" }}>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orderConfirmation.items.map((item) => (
+                  <tr key={item.id} style={{ borderBottom: "1px solid #eee" }}>
+                    <td style={{ padding: "0.5rem 0" }}>{item.name}</td>
+                    <td style={{ padding: "0.5rem 0", textAlign: "center" }}>{item.quantity}</td>
+                    <td style={{ padding: "0.5rem 0", textAlign: "right" }}>${item.price.toFixed(2)}</td>
+                    <td style={{ padding: "0.5rem 0", textAlign: "right" }}>${item.subtotal.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="print-totals" style={{ marginLeft: "auto", width: "250px", borderTop: "2px solid #333", paddingTop: "0.5rem", fontSize: "0.95rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", margin: "0.25rem 0" }}>
+              <span>Subtotal:</span>
+              <span>${orderConfirmation.subtotal.toFixed(2)}</span>
+            </div>
+            {orderConfirmation.discount > 0 && (
+              <div style={{ display: "flex", justifyContent: "space-between", margin: "0.25rem 0", color: "#000" }}>
+                <span>Descuento ({orderConfirmation.coupon}):</span>
+                <span>-${orderConfirmation.discount.toFixed(2)}</span>
+              </div>
+            )}
+            <div style={{ display: "flex", justifyContent: "space-between", margin: "0.5rem 0 0 0", paddingTop: "0.5rem", borderTop: "1px solid #ddd", fontWeight: "700", fontSize: "1.1rem" }}>
+              <span>Total Pagado:</span>
+              <span>${orderConfirmation.total.toFixed(2)}</span>
+            </div>
+          </div>
+          
+          <div className="print-footer" style={{ marginTop: "4rem", textAlign: "center", fontSize: "0.8rem", borderTop: "1px solid #eee", paddingTop: "1rem", color: "#666" }}>
+            <p>Gracias por su compra en ElectroMart Componentes Electrónicos.</p>
+            <p>Este documento sirve como comprobante de pago oficial y constancia para efectos de garantía.</p>
+          </div>
+        </div>
+      )}
+
+      {/* Footer */}
+      <footer className="main-footer hide-on-print">
+        <p>© 2026 ElectroMart Componentes Tecnológicos. Diseñado con enfoque Mobile-First y CSS puro.</p>
+        <p style={{ fontSize: "0.75rem", marginTop: "0.5rem" }}>Sistema de validación de stock física activa.</p>
+      </footer>
     </div>
   );
 }

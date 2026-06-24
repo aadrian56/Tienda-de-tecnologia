@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <rect x="30" y="25" width="40" height="60" rx="2" fill="#1d4ed8" />
+  
+  <!-- LED IR (clear/blue) and Photodiode (black) -->
+  <rect x="36" y="10" width="8" height="15" rx="3" fill="#93c5fd" stroke="#2563eb" stroke-width="1" />
+  <rect x="56" y="10" width="8" height="15" rx="3" fill="#111827" />
+  
+  <!-- Potentiometer (blue box with brass screw) -->
+  <rect x="42" y="45" width="16" height="16" fill="#2563eb" rx="1" />
+  <circle cx="50" cy="53" r="4" fill="#cbd5e1" />
+  <rect x="50" y="52" width="4" height="2" fill="#d97706" />
+  
+  <!-- pins -->
+  <rect x="46" y="85" width="8" height="10" fill="#eab308" />
+</svg>

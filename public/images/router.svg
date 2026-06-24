@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <!-- Antennas -->
+  <line x1="20" y1="15" x2="20" y2="55" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+  <line x1="40" y1="10" x2="40" y2="55" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+  <line x1="60" y1="10" x2="60" y2="55" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+  <line x1="80" y1="15" x2="80" y2="55" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+  
+  <!-- Body -->
+  <rect x="15" y="55" width="70" height="25" rx="3" fill="#334155" stroke="#1e293b" stroke-width="2" />
+  <!-- Glowing LEDs -->
+  <g fill="#03DAC6">
+    <circle cx="25" cy="67" r="1.5" />
+    <circle cx="35" cy="67" r="1.5" />
+    <circle cx="45" cy="67" r="1.5" />
+    <circle cx="55" cy="67" r="1.5" />
+    <circle cx="65" cy="67" r="1.5" />
+    <circle cx="75" cy="67" r="1.5" />
+  </g>
+</svg>

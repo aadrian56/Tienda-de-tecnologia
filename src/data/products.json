@@ -1,0 +1,332 @@
+[
+  {
+    "id": "prod-001",
+    "name": "Microcontrolador ESP32-WROOM-32D",
+    "category": "microcontrollers",
+    "price": 8.5,
+    "stock": 11,
+    "description": "Módulo Wi-Fi y Bluetooth de bajo consumo de energía con antenas integradas, ideal para prototipado IoT y domótica.",
+    "specs": {
+      "Voltaje": "3.3V",
+      "Núcleos": "Dual-Core Tensilica 240MHz",
+      "Conectividad": "Wi-Fi 802.11 b/g/n & Bluetooth v4.2 BR/EDR/BLE",
+      "Pines GPIO": "38 pines"
+    },
+    "imageUrl": "/images/esp32.svg"
+  },
+  {
+    "id": "prod-002",
+    "name": "Arduino Uno R3",
+    "category": "microcontrollers",
+    "price": 22,
+    "stock": 8,
+    "description": "Placa de desarrollo basada en el microcontrolador ATmega328P. Excelente para aprender electrónica básica y programación.",
+    "specs": {
+      "Voltaje": "5V (Recomendado 7-12V)",
+      "Chip Principal": "ATmega328P",
+      "Memoria Flash": "32 KB",
+      "Pines E/S Digitales": "14 (6 salidas PWM)"
+    },
+    "imageUrl": "/images/arduino.svg"
+  },
+  {
+    "id": "prod-003",
+    "name": "Raspberry Pi Pico W",
+    "category": "microcontrollers",
+    "price": 7,
+    "stock": 15,
+    "description": "Placa microcontroladora de bajo costo y alto rendimiento construida con el chip RP2040 y conectividad inalámbrica integrada.",
+    "specs": {
+      "Voltaje": "3.3V",
+      "Procesador": "Dual-core ARM Cortex-M0+ a 133MHz",
+      "SRAM": "264KB",
+      "Conectividad": "Wi-Fi de 2.4GHz en placa"
+    },
+    "imageUrl": "/images/pico.svg"
+  },
+  {
+    "id": "prod-004",
+    "name": "Sensor de Ultrasonido HC-SR04",
+    "category": "sensors",
+    "price": 3.2,
+    "stock": 18,
+    "description": "Sensor de medición de distancia ultrasónico sin contacto de alta precisión, rango de detección de 2cm a 400cm.",
+    "specs": {
+      "Voltaje": "5V",
+      "Frecuencia": "40 kHz",
+      "Corriente": "15mA",
+      "Ángulo": "< 15 grados"
+    },
+    "imageUrl": "/images/ultrasonic.svg"
+  },
+  {
+    "id": "prod-005",
+    "name": "Sensor de Temperatura y Humedad DHT22",
+    "category": "sensors",
+    "price": 6.5,
+    "stock": 5,
+    "description": "Sensor digital capacitivo de alta precisión para medir temperatura ambiente y humedad relativa.",
+    "specs": {
+      "Voltaje": "3.3V - 6V",
+      "Rango Humedad": "0-100% HR (±2%)",
+      "Rango Temp": "-40 a 80 °C (±0.5°C)",
+      "Salida": "Bus de datos digital único"
+    },
+    "imageUrl": "/images/dht22.svg"
+  },
+  {
+    "id": "prod-006",
+    "name": "Sensor de Presión Barométrica BMP280",
+    "category": "sensors",
+    "price": 4.5,
+    "stock": 3,
+    "description": "Sensor barométrico digital de presión absoluta y temperatura de precisión absoluta excelente para altímetro.",
+    "specs": {
+      "Voltaje": "1.71V - 3.6V",
+      "Comunicación": "I2C y SPI",
+      "Rango Presión": "300 a 1100 hPa",
+      "Precisión": "±0.12 hPa (±1m aprox.)"
+    },
+    "imageUrl": "/images/bmp280.svg"
+  },
+  {
+    "id": "prod-007",
+    "name": "Router Archer C6 AC1200",
+    "category": "routers",
+    "price": 45,
+    "stock": 0,
+    "description": "Router inalámbrico Gigabit de doble banda AC1200 que crea una red confiable y veloz potenciada por tecnología Wi-Fi 802.11ac.",
+    "specs": {
+      "Velocidad 2.4GHz": "300 Mbps",
+      "Velocidad 5GHz": "867 Mbps",
+      "Puertos": "4 LAN Gigabit, 1 WAN Gigabit",
+      "Antenas": "4 Antenas Externas + 1 Interna"
+    },
+    "imageUrl": "/images/router.svg"
+  },
+  {
+    "id": "prod-008",
+    "name": "Switch Gigabit Ethernet de 8 Puertos",
+    "category": "routers",
+    "price": 28,
+    "stock": 4,
+    "description": "Switch de red de escritorio de 8 puertos RJ45 a 10/100/1000Mbps no gestionado. Diseño metálico robusto y Plug and Play.",
+    "specs": {
+      "Capacidad": "16 Gbps de ancho de banda",
+      "Estándar": "IEEE 802.3i/u/ab/x",
+      "Puertos": "8 puertos RJ45 Gigabit",
+      "Consumo": "Máx. 4.3W"
+    },
+    "imageUrl": "/images/switch.svg"
+  },
+  {
+    "id": "prod-009",
+    "name": "Módulo Inalámbrico NRF24L01+ PA LNA",
+    "category": "routers",
+    "price": 5.9,
+    "stock": 24,
+    "description": "Módulo de comunicación inalámbrica RF de 2.4GHz con amplificador de potencia y antena externa para transmisiones de largo alcance (hasta 1km).",
+    "specs": {
+      "Voltaje": "1.9V - 3.6V (Pines toleran 5V)",
+      "Frecuencia": "2.4 GHz ISM",
+      "Alcance": "Hasta 1000 metros (línea de vista)",
+      "Velocidad de datos": "Hasta 2 Mbps"
+    },
+    "imageUrl": "/images/nrf24l01.svg"
+  },
+  {
+    "id": "prod-010",
+    "name": "Microcontrolador NodeMCU ESP8266",
+    "category": "microcontrollers",
+    "price": 6.2,
+    "stock": 14,
+    "description": "Placa de desarrollo de código abierto basada en el chip ESP8266 con Wi-Fi integrado, ideal para proyectos sencillos de IoT y aprendizaje de redes.",
+    "specs": {
+      "Voltaje": "3.3V (Alimentación 5V USB)",
+      "Procesador": "L106 de 32 bits a 80 MHz",
+      "Conectividad": "Wi-Fi 2.4 GHz (802.11 b/g/n)",
+      "Pines GPIO": "10 pines GPIO, 1 ADC"
+    },
+    "imageUrl": "/images/nodemcu.svg"
+  },
+  {
+    "id": "prod-011",
+    "name": "Sensor de Obstáculos Infrarrojo",
+    "category": "sensors",
+    "price": 2.5,
+    "stock": 2,
+    "description": "Sensor de detección de obstáculos por infrarrojos con distancia de detección ajustable mediante potenciómetro (2 a 30cm).",
+    "specs": {
+      "Voltaje": "3.3V - 5V",
+      "Ángulo detección": "35 grados",
+      "Salida": "Digital (0 y 1)",
+      "Chip Comparador": "LM393 integrado"
+    },
+    "imageUrl": "/images/ir_obstacle.svg"
+  },
+  {
+    "id": "prod-012",
+    "name": "Módulo Relé de 5V de 1 Canal",
+    "category": "routers",
+    "price": 3.8,
+    "stock": 9,
+    "description": "Módulo relé optoacoplado de 1 canal que permite controlar cargas de alta tensión (hasta 250VAC o 30VDC a 10A) mediante señales digitales de 5V.",
+    "specs": {
+      "Voltaje Control": "5V DC",
+      "Corriente Control": "15-20mA",
+      "Carga Máxima": "10A @ 250VAC / 10A @ 30VDC",
+      "Aislamiento": "Optoacoplador integrado"
+    },
+    "imageUrl": "/images/relay.svg"
+  },
+  {
+    "id": "prod-013",
+    "name": "Sensor de Luz Fotoresistencia LDR",
+    "category": "sensors",
+    "price": 1.5,
+    "stock": 3,
+    "description": "Sensor fotosensible analógico/digital para medir la intensidad de luz ambiental. Cuenta con potenciómetro para regular el umbral de disparo digital.",
+    "specs": {
+      "Voltaje": "3.3V - 5V",
+      "Salida": "Dual (Analógica y Digital)",
+      "Dimensiones": "32mm x 14mm",
+      "Indicador": "LED de encendido y estado"
+    },
+    "imageUrl": "/images/ldr.svg"
+  },
+  {
+    "id": "prod-014",
+    "name": "Módulo Bluetooth HC-05",
+    "category": "routers",
+    "price": 9.5,
+    "stock": 11,
+    "description": "Módulo transceptor Bluetooth SPP (Serial Port Protocol) de fácil uso, ideal para comunicación inalámbrica serial entre microcontroladores y smartphones.",
+    "specs": {
+      "Protocolo": "Bluetooth v2.0 + EDR",
+      "Voltaje": "3.6V - 6V",
+      "Frecuencia": "Banda ISM de 2.4GHz",
+      "Modos": "Esclavo y Maestro"
+    },
+    "imageUrl": "/images/hc05.svg"
+  },
+  {
+    "id": "prod-015",
+    "name": "NodeMCU V3 ESP8266",
+    "category": "microcontrollers",
+    "price": 5.5,
+    "stock": 25,
+    "description": "Versión mejorada V3 del módulo NodeMCU con chip de interfaz USB CH340, ofreciendo pines de alimentación extra y mayor estabilidad de depuración.",
+    "specs": {
+      "Chip USB": "CH340G",
+      "Voltaje": "3.3V (5V USB)",
+      "Memoria Flash": "4 MB",
+      "Pines GPIO": "11 GPIO, 1 ADC"
+    },
+    "imageUrl": "/images/nodemcu_v3.svg"
+  },
+  {
+    "id": "prod-016",
+    "name": "Módulo Bluetooth HC-05",
+    "category": "networks",
+    "price": 6.2,
+    "stock": 14,
+    "description": "Módulo Bluetooth clásico configurable como Maestro o Esclavo, ideal para crear redes seriales inalámbricas con Arduino o microcontroladores.",
+    "specs": {
+      "Perfiles": "SPP (Serial Port Profile)",
+      "Voltaje": "3.3V a 6V",
+      "Corriente": "30-40mA",
+      "Baudrate": "9600 bps predeterminado"
+    },
+    "imageUrl": "/images/hc05_s.svg"
+  },
+  {
+    "id": "prod-017",
+    "name": "Sensor BME280 Humedad/Presión",
+    "category": "sensores",
+    "price": 4.8,
+    "stock": 8,
+    "description": "Sensor ambiental digital de alta precisión que mide temperatura, presión barométrica y humedad relativa en un solo chip ultracompacto.",
+    "specs": {
+      "Comunicación": "I2C / SPI",
+      "Voltaje": "1.8V - 3.6V",
+      "Consumo": "Menos de 3.6 uA",
+      "Rango Humedad": "0-100% HR"
+    },
+    "imageUrl": "/images/bme280.svg"
+  },
+  {
+    "id": "prod-018",
+    "name": "Sensor de Luz BH1750",
+    "category": "sensores",
+    "price": 3.5,
+    "stock": 10,
+    "description": "Sensor de intensidad de luz digital con salida en Lux directos. Excelente para automatización de luces en invernaderos y pantallas.",
+    "specs": {
+      "Resolución": "1 Lux",
+      "Rango Luz": "1 a 65535 Lux",
+      "Voltaje": "3.0V - 5V",
+      "Comunicación": "I2C Bus interface"
+    },
+    "imageUrl": "/images/bh1750.svg"
+  },
+  {
+    "id": "prod-019",
+    "name": "Sensor Ultrasonido HC-SR04",
+    "category": "sensores",
+    "price": 2,
+    "stock": 40,
+    "description": "Módulo ultrasónico estándar para la detección de objetos y medición de distancias en robótica móvil e ingeniería.",
+    "specs": {
+      "Voltaje": "5V",
+      "Rango Medición": "2cm a 400cm",
+      "Ángulo": "15 grados",
+      "Gatillo": "Pulso TTL de 10us"
+    },
+    "imageUrl": "/images/ultrasonic_eco.svg"
+  },
+  {
+    "id": "prod-020",
+    "name": "Módulo Relé de 4 Canales 5V",
+    "category": "microcontrollers",
+    "price": 4.5,
+    "stock": 3,
+    "description": "Placa con 4 relés optoacoplados independientes para controlar múltiples cargas de corriente alterna o directa desde un microcontrolador.",
+    "specs": {
+      "Canales": "4 independientes",
+      "Voltaje Bobina": "5V DC",
+      "Capacidad Contacto": "10A @ 250VAC",
+      "Aislamiento": "Fototransistor optoacoplador"
+    },
+    "imageUrl": "/images/relay_4ch.svg"
+  },
+  {
+    "id": "prod-021",
+    "name": "Servomotor MG996R Alto Torque",
+    "category": "sensores",
+    "price": 7.8,
+    "stock": 15,
+    "description": "Servomotor con engranajes metálicos y doble rodamiento de bolas que provee un torque de hasta 11 kg/cm. Ideal para robótica y aeromodelismo.",
+    "specs": {
+      "Engranajes": "Metálicos",
+      "Ángulo Giro": "180 grados",
+      "Voltaje": "4.8V a 7.2V",
+      "Torque": "11 kg/cm (a 6V)"
+    },
+    "imageUrl": "/images/servo.svg"
+  },
+  {
+    "id": "prod-022",
+    "name": "Driver de Motores L298N",
+    "category": "microcontrollers",
+    "price": 3.9,
+    "stock": 18,
+    "description": "Módulo puente H doble para control de dirección y velocidad de hasta 2 motores DC o 1 motor paso a paso bipolar.",
+    "specs": {
+      "Chip de Control": "L298N Puente H Doble",
+      "Voltaje Motores": "5V a 35V",
+      "Corriente Pico": "2A por canal",
+      "Voltaje Control": "5V DC"
+    },
+    "imageUrl": "/images/l298n.svg"
+  }
+]
