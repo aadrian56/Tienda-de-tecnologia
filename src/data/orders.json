@@ -209,5 +209,37 @@
     "discount": 7.25,
     "iva": 3.26,
     "total": 25.01
+  },
+  {
+    "orderId": "ORD-140443",
+    "date": "2026-06-25T17:31:06.922Z",
+    "customer": {
+      "name": "sad",
+      "email": "adrian@example.com",
+      "address": "awweqwqewwe",
+      "city": "Macas",
+      "phone": "0979857183"
+    },
+    "items": [
+      {
+        "id": "prod-002",
+        "name": "Arduino Uno R3",
+        "price": 22,
+        "quantity": 2,
+        "subtotal": 44
+      },
+      {
+        "id": "prod-009",
+        "name": "Módulo Inalámbrico NRF24L01+ PA LNA",
+        "price": 5.9,
+        "quantity": 1,
+        "subtotal": 5.9
+      }
+    ],
+    "subtotal": 49.9,
+    "coupon": "CAM23",
+    "discount": 12.47,
+    "iva": 5.61,
+    "total": 43.04
   }
 ]

@@ -19,7 +19,7 @@
     "name": "Arduino Uno R3",
     "category": "microcontrollers",
     "price": 22,
-    "stock": 7,
+    "stock": 5,
     "description": "Placa de desarrollo basada en el microcontrolador ATmega328P. Excelente para aprender electrónica básica y programación.",
     "specs": {
       "Voltaje": "5V (Recomendado 7-12V)",
@@ -124,7 +124,7 @@
     "name": "Módulo Inalámbrico NRF24L01+ PA LNA",
     "category": "routers",
     "price": 5.9,
-    "stock": 24,
+    "stock": 23,
     "description": "Módulo de comunicación inalámbrica RF de 2.4GHz con amplificador de potencia y antena externa para transmisiones de largo alcance (hasta 1km).",
     "specs": {
       "Voltaje": "1.9V - 3.6V (Pines toleran 5V)",
