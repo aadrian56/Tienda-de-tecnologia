@@ -109,7 +109,7 @@
     "name": "Switch Gigabit Ethernet de 8 Puertos",
     "category": "routers",
     "price": 28,
-    "stock": 4,
+    "stock": 3,
     "description": "Switch de red de escritorio de 8 puertos RJ45 a 10/100/1000Mbps no gestionado. Diseño metálico robusto y Plug and Play.",
     "specs": {
       "Capacidad": "16 Gbps de ancho de banda",
@@ -439,7 +439,7 @@
     "name": "Teensy 4.0 Development Board",
     "category": "microcontrollers",
     "price": 24,
-    "stock": 4,
+    "stock": 3,
     "description": "Placa de desarrollo ultra rápida y potente de alto rendimiento que opera a 600 MHz, excelente para procesamiento de audio en tiempo real y cálculo matemático intensivo.",
     "specs": {
       "Procesador": "ARM Cortex-M7",
@@ -468,7 +468,7 @@
     "id": "prod-032",
     "name": "Sensor de Temp/Humedad Alta Precisión DHT22",
     "category": "sensores",
-    "price": 4.50,
+    "price": 4.5,
     "stock": 35,
     "description": "Sensor de temperatura y humedad digital capacitivo de alta precisión para mediciones climáticas de grado profesional en interiores y laboratorios.",
     "specs": {
@@ -483,7 +483,7 @@
     "id": "prod-033",
     "name": "Sensor de Gas y Humo MQ-2",
     "category": "sensores",
-    "price": 3.20,
+    "price": 3.2,
     "stock": 12,
     "description": "Sensor químico de gas inflamable y humo para sistemas de seguridad industrial y alarmas de detección temprana de incendios o fugas de GLP.",
     "specs": {
@@ -498,7 +498,7 @@
     "id": "prod-034",
     "name": "Sensor de Pulso y Oxígeno MAX30102",
     "category": "sensores",
-    "price": 6.80,
+    "price": 6.8,
     "stock": 8,
     "description": "Módulo biosensor para estimación del ritmo cardíaco y nivel de saturación de oxígeno en sangre (SpO2) a través de fotopletismografía reflectiva.",
     "specs": {
@@ -513,7 +513,7 @@
     "id": "prod-035",
     "name": "Sensor de Reconocimiento de Color TCS3200",
     "category": "sensores",
-    "price": 5.50,
+    "price": 5.5,
     "stock": 10,
     "description": "Convertidor de luz a frecuencia que combina fotodiodos de silicio y un convertidor de corriente a frecuencia en un solo circuito integrado de reconocimiento cromático.",
     "specs": {
@@ -528,7 +528,7 @@
     "id": "prod-036",
     "name": "Giroscopio y Acelerómetro MPU-6050",
     "category": "sensores",
-    "price": 3.90,
+    "price": 3.9,
     "stock": 20,
     "description": "Unidad de medición inercial (IMU) de 6 grados de libertad que combina un giroscopio de 3 ejes y un acelerómetro de 3 ejes en un mismo chip con procesador digital de movimiento.",
     "specs": {
