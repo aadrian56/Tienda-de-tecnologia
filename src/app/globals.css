@@ -1228,3 +1228,8 @@ button:active:not(:disabled),
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* Team Section Avatar Hover */
+.team-member-card:hover .team-avatar {
+  transform: scale(1.15);
+}

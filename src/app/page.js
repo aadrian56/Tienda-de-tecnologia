@@ -695,7 +695,7 @@ export default function Home() {
                   {/* Member 1 */}
                   <div className="team-member-card" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "2.5rem 1.5rem", display: "flex", flexDirection: "column", alignItems: "center", transition: "transform 0.3s", boxShadow: "0 4px 6px rgba(0,0,0,0.05)" }} onMouseOver={(e) => e.currentTarget.style.transform = "translateY(-5px)"} onMouseOut={(e) => e.currentTarget.style.transform = "translateY(0)"}>
                     <div style={{ width: "120px", height: "120px", borderRadius: "50%", backgroundColor: "var(--border)", marginBottom: "1.5rem", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", border: "4px solid var(--primary)", position: "relative" }}>
-                      <img src="/images/andres.jpg" alt="Andres Miranda" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                      <img className="team-avatar" src="/images/andres.jpg" alt="Andres Miranda" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", transition: "transform 0.3s ease" }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                       <span style={{ fontSize: "3.5rem", display: "none" }}>🧑‍💻</span>
                     </div>
                     <h3 style={{ fontSize: "1.3rem", marginBottom: "0.5rem", color: "var(--text-main)" }}>Andres Miranda</h3>
@@ -706,7 +706,7 @@ export default function Home() {
                   {/* Member 2 */}
                   <div className="team-member-card" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "2.5rem 1.5rem", display: "flex", flexDirection: "column", alignItems: "center", transition: "transform 0.3s", boxShadow: "0 4px 6px rgba(0,0,0,0.05)" }} onMouseOver={(e) => e.currentTarget.style.transform = "translateY(-5px)"} onMouseOut={(e) => e.currentTarget.style.transform = "translateY(0)"}>
                     <div style={{ width: "120px", height: "120px", borderRadius: "50%", backgroundColor: "var(--border)", marginBottom: "1.5rem", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", border: "4px solid var(--primary)", position: "relative" }}>
-                      <img src="/images/anthony.jpg" alt="Anthony Martinez" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                      <img className="team-avatar" src="/images/anthony.jpg" alt="Anthony Martinez" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", transition: "transform 0.3s ease" }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                       <span style={{ fontSize: "3.5rem", display: "none" }}>🧑‍💻</span>
                     </div>
                     <h3 style={{ fontSize: "1.3rem", marginBottom: "0.5rem", color: "var(--text-main)" }}>Anthony Martinez</h3>
@@ -717,7 +717,7 @@ export default function Home() {
                   {/* Member 3 */}
                   <div className="team-member-card" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "2.5rem 1.5rem", display: "flex", flexDirection: "column", alignItems: "center", transition: "transform 0.3s", boxShadow: "0 4px 6px rgba(0,0,0,0.05)" }} onMouseOver={(e) => e.currentTarget.style.transform = "translateY(-5px)"} onMouseOut={(e) => e.currentTarget.style.transform = "translateY(0)"}>
                     <div style={{ width: "120px", height: "120px", borderRadius: "50%", backgroundColor: "var(--border)", marginBottom: "1.5rem", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", border: "4px solid var(--primary)", position: "relative" }}>
-                      <img src="/images/brayan.jpg" alt="Brayan Guncay" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                      <img className="team-avatar" src="/images/brayan.jpg" alt="Brayan Guncay" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", transition: "transform 0.3s ease" }} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                       <span style={{ fontSize: "3.5rem", display: "none" }}>🧑‍💻</span>
                     </div>
                     <h3 style={{ fontSize: "1.3rem", marginBottom: "0.5rem", color: "var(--text-main)" }}>Brayan Guncay</h3>
