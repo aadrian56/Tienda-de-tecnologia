@@ -30,9 +30,14 @@ export async function POST(request) {
 
     // Coupon validation
     let hasDiscount = false;
+    let discountRate = 0;
     if (coupon && coupon.trim() !== "") {
       if (coupon.trim() === "DESCUENTO10") {
         hasDiscount = true;
+        discountRate = 0.10;
+      } else if (coupon.trim() === "CAM23") {
+        hasDiscount = true;
+        discountRate = 0.25;
       } else {
         console.log(`[API SERVER LOG] [${timestamp}] POST /api/checkout 400 - Cupón inválido: "${coupon}".`);
         return NextResponse.json(
@@ -87,7 +92,7 @@ export async function POST(request) {
     }
 
     // Calculate discount and total
-    const discountAmount = hasDiscount ? parseFloat((subtotal * 0.10).toFixed(2)) : 0;
+    const discountAmount = hasDiscount ? parseFloat((subtotal * discountRate).toFixed(2)) : 0;
     const total = parseFloat((subtotal - discountAmount).toFixed(2));
 
     // Save updated stock back to products.json

@@ -309,6 +309,10 @@ export default function Home() {
       setAppliedCoupon("DESCUENTO10");
       setCouponError("");
       showToast("Cupón DESCUENTO10 aplicado: 10% de descuento.", "success");
+    } else if (code === "CAM23") {
+      setAppliedCoupon("CAM23");
+      setCouponError("");
+      showToast("Cupón CAM23 aplicado: 25% de descuento.", "success");
     } else {
       setAppliedCoupon("");
       setCouponError("Cupón inválido o no reconocido.");
@@ -318,7 +322,7 @@ export default function Home() {
 
   // Calculate Totals and Discounts
   const cartSubtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const discount = appliedCoupon === "DESCUENTO10" ? cartSubtotal * 0.10 : 0;
+  const discount = appliedCoupon === "DESCUENTO10" ? cartSubtotal * 0.10 : appliedCoupon === "CAM23" ? cartSubtotal * 0.25 : 0;
   const cartTotal = cartSubtotal - discount;
 
   const validateField = (field, val) => {
