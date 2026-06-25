@@ -487,7 +487,7 @@ export default function Home() {
             <span className="logo-icon">⚡</span>
             <span>ElectroMart</span>
           </div>
-          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <div className="header-controls" style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap", justifyContent: "flex-end" }}>
             {/* Tab Navigation buttons */}
             <button 
               className={`filter-btn ${activeTab === "catalog" ? "active" : ""}`}
