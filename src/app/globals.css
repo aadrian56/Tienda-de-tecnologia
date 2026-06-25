@@ -1214,3 +1214,17 @@ button:active:not(:disabled),
   border: 2px solid var(--bg-main);
   box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
+
+/* Product Details View Layout */
+.product-details-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .product-details-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+}

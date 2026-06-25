@@ -11,6 +11,10 @@ export default function Home() {
   const [cart, setCart] = useState([]);
   const [toasts, setToasts] = useState([]);
   
+  // Product Details View states
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProductQuantity, setSelectedProductQuantity] = useState(1);
+  
   // Phase 2 states
   const [activeTab, setActiveTab] = useState("home"); // home, catalog, wishlist, history
   const [wishlist, setWishlist] = useState([]);
@@ -514,7 +518,7 @@ export default function Home() {
       {/* Main Header */}
       <header className={`main-header hide-on-print ${isHeaderVisible ? 'header-visible' : 'header-hidden'}`}>
         <div className="header-content">
-          <div className="logo" onClick={() => { setActiveTab("home"); setCheckoutStep(1); }} style={{ cursor: "pointer" }}>
+          <div className="logo" onClick={() => { setActiveTab("home"); setCheckoutStep(1); setSelectedProduct(null); }} style={{ cursor: "pointer" }}>
             <span className="logo-icon">⚡</span>
             <span>ElectroMart</span>
           </div>
@@ -522,21 +526,21 @@ export default function Home() {
           <div className="header-nav-tabs">
             <button 
               className={`filter-btn ${activeTab === "home" ? "active" : ""}`}
-              onClick={() => setActiveTab("home")}
+              onClick={() => { setActiveTab("home"); setSelectedProduct(null); }}
               style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "home" ? "none" : "1px solid var(--border)" }}
             >
               Inicio 🏠
             </button>
             <button 
               className={`filter-btn ${activeTab === "catalog" ? "active" : ""}`}
-              onClick={() => setActiveTab("catalog")}
+              onClick={() => { setActiveTab("catalog"); setSelectedProduct(null); }}
               style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "catalog" ? "none" : "1px solid var(--border)" }}
             >
               Catálogo 📦
             </button>
             <button 
               className={`filter-btn ${activeTab === "wishlist" ? "active" : ""}`}
-              onClick={() => setActiveTab("wishlist")}
+              onClick={() => { setActiveTab("wishlist"); setSelectedProduct(null); }}
               style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "wishlist" ? "none" : "1px solid var(--border)" }}
             >
               Favoritos ❤️
@@ -544,7 +548,7 @@ export default function Home() {
             </button>
             <button 
               className={`filter-btn ${activeTab === "history" ? "active" : ""}`}
-              onClick={() => setActiveTab("history")}
+              onClick={() => { setActiveTab("history"); setSelectedProduct(null); }}
               style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "history" ? "none" : "1px solid var(--border)" }}
             >
               Historial 📜
@@ -730,6 +734,152 @@ export default function Home() {
                 </div>
               )}
             </div>
+          ) : selectedProduct ? (
+            /* Product Details View */
+            <div className="product-details-container" style={{ animation: "fadeIn 0.3s ease-in" }}>
+              {/* Breadcrumb Navigation */}
+              <nav className="breadcrumbs hide-on-print" style={{ marginBottom: "2rem", display: "flex", gap: "0.5rem", fontSize: "0.9rem", color: "var(--text-muted)", flexWrap: "wrap" }}>
+                <span style={{ cursor: "pointer", color: "var(--primary)" }} onClick={() => { setActiveTab("home"); setSelectedProduct(null); }}>Inicio</span> /
+                <span style={{ cursor: "pointer", color: "var(--primary)" }} onClick={() => setSelectedProduct(null)}>Catálogo</span> /
+                <span style={{ cursor: "pointer", color: "var(--primary)" }} onClick={() => { setActiveCategory(selectedProduct.category); setSelectedProduct(null); }}>
+                  {selectedProduct.category === "microcontrollers" ? "Microcontroladores" : selectedProduct.category === "sensors" ? "Sensores" : "Redes / Routers"}
+                </span> /
+                <strong style={{ color: "var(--text-main)" }}>{selectedProduct.name}</strong>
+              </nav>
+
+              <div className="product-details-layout" style={{ display: "grid", gap: "2rem", marginBottom: "4rem" }}>
+                
+                {/* Left Column: Gallery */}
+                <div className="product-gallery">
+                  <div className="main-image-container" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "2rem", display: "flex", justifyContent: "center", alignItems: "center", height: "400px", position: "relative" }}>
+                    <Image
+                      src={selectedProduct.imageUrl}
+                      alt={selectedProduct.name}
+                      fill
+                      style={{ objectFit: "contain", padding: "2rem" }}
+                      priority
+                    />
+                  </div>
+                  {/* Thumbnails (Simulated) */}
+                  <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+                    {[1, 2, 3, 4].map(idx => (
+                      <div key={idx} style={{ width: "80px", height: "80px", border: `2px solid ${idx === 1 ? "var(--primary)" : "var(--border)"}`, borderRadius: "var(--radius-sm)", backgroundColor: "var(--bg-card)", display: "flex", justifyContent: "center", alignItems: "center", cursor: "pointer", opacity: idx === 1 ? 1 : 0.6, position: "relative" }}>
+                        <Image src={selectedProduct.imageUrl} alt="thumbnail" fill style={{ objectFit: "contain", padding: "10px" }} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right Column: Info */}
+                <div className="product-info-column" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                  <div>
+                    <span style={{ textTransform: "uppercase", fontSize: "0.8rem", fontWeight: "700", color: "var(--secondary)", letterSpacing: "1px" }}>
+                      {selectedProduct.category === "microcontrollers" ? "Microcontrolador" : selectedProduct.category === "sensors" ? "Sensor" : "Redes / Routers"}
+                    </span>
+                    <h1 style={{ fontSize: "2rem", marginTop: "0.5rem", marginBottom: "1rem", lineHeight: "1.2" }}>{selectedProduct.name}</h1>
+                    <p style={{ fontSize: "1.05rem", color: "var(--text-muted)", lineHeight: "1.6" }}>{selectedProduct.description}</p>
+                  </div>
+
+                  <div className="product-details-specs" style={{ display: "grid", gap: "0.5rem", padding: "1.5rem 0", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+                    {Object.entries(selectedProduct.specs).map(([key, val]) => (
+                      <div key={key} style={{ display: "grid", gridTemplateColumns: "120px 1fr", gap: "1rem", fontSize: "0.95rem" }}>
+                        <span style={{ color: "var(--text-muted)" }}>{key}</span>
+                        <span style={{ fontWeight: "500", color: "var(--text-main)" }}>{val}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
+                      <span style={{ fontSize: "2.5rem", fontWeight: "800", color: "var(--primary)" }}>${selectedProduct.price.toFixed(2)}</span>
+                      {selectedProduct.stock > 0 ? (
+                        <span className="stock-tag in-stock" style={{ padding: "0.3rem 0.8rem", fontSize: "0.9rem" }}>{selectedProduct.stock} disponibles</span>
+                      ) : (
+                        <span className="stock-tag out-of-stock" style={{ padding: "0.3rem 0.8rem", fontSize: "0.9rem" }}>Agotado</span>
+                      )}
+                    </div>
+
+                    <div style={{ display: "flex", gap: "1rem", alignItems: "stretch", flexWrap: "wrap" }}>
+                      <div style={{ display: "flex", alignItems: "center", border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", backgroundColor: "var(--bg-card)", overflow: "hidden" }}>
+                        <button 
+                          style={{ padding: "0.8rem 1.2rem", background: "transparent", border: "none", color: "var(--text-main)", cursor: "pointer", fontSize: "1.2rem" }}
+                          onClick={() => setSelectedProductQuantity(prev => Math.max(1, prev - 1))}
+                          disabled={selectedProductQuantity <= 1 || selectedProduct.stock <= 0}
+                        >-</button>
+                        <span style={{ padding: "0 1rem", fontWeight: "600", fontSize: "1.1rem" }}>{selectedProductQuantity}</span>
+                        <button 
+                          style={{ padding: "0.8rem 1.2rem", background: "transparent", border: "none", color: "var(--text-main)", cursor: "pointer", fontSize: "1.2rem" }}
+                          onClick={() => setSelectedProductQuantity(prev => Math.min(selectedProduct.stock, prev + 1))}
+                          disabled={selectedProductQuantity >= selectedProduct.stock || selectedProduct.stock <= 0}
+                        >+</button>
+                      </div>
+                      
+                      <button 
+                        className="action-btn"
+                        style={{ flex: 1, padding: "1rem 2rem", fontSize: "1.1rem", justifyContent: "center" }}
+                        disabled={selectedProduct.stock <= 0}
+                        onClick={() => {
+                          const cartItem = cart.find(i => i.id === selectedProduct.id);
+                          const currentQty = cartItem ? cartItem.quantity : 0;
+                          if (currentQty + selectedProductQuantity > selectedProduct.stock) {
+                            showToast(`Límite superado. Solo puedes añadir ${selectedProduct.stock - currentQty} más.`, "error");
+                            return;
+                          }
+                          
+                          if (cartItem) {
+                            setCart(cart.map(item => item.id === selectedProduct.id ? { ...item, quantity: item.quantity + selectedProductQuantity } : item));
+                          } else {
+                            setCart([...cart, { ...selectedProduct, quantity: selectedProductQuantity }]);
+                          }
+                          showToast(`${selectedProductQuantity}x ${selectedProduct.name} añadido al carrito`, "success");
+                        }}
+                      >
+                        Añadir al carrito 🛒
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Related Products Section */}
+              <div style={{ marginTop: "4rem", paddingTop: "2rem", borderTop: "1px solid var(--border)" }}>
+                <h2 style={{ marginBottom: "1.5rem", fontSize: "1.4rem", color: "var(--text-main)" }}>También te puede interesar</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1rem" }}>
+                  {products
+                    .filter(p => p.category === selectedProduct.category && p.id !== selectedProduct.id)
+                    .slice(0, 4)
+                    .map(product => {
+                      const cartItem = cart.find((item) => item.id === product.id);
+                      const cartQty = cartItem ? cartItem.quantity : 0;
+                      const isOutOfStock = product.stock <= 0;
+                      const isLimitReached = cartQty >= product.stock;
+
+                      return (
+                        <div key={product.id} className="product-card" style={{ padding: "1rem", cursor: "pointer", display: "flex", flexDirection: "column", justifyContent: "space-between" }} onClick={() => { setSelectedProduct(product); setSelectedProductQuantity(1); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+                          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+                            <div style={{ width: "60px", height: "60px", position: "relative", backgroundColor: "rgba(0,0,0,0.1)", borderRadius: "8px", flexShrink: 0 }}>
+                              <Image src={product.imageUrl} alt={product.name} fill style={{ objectFit: "contain", padding: "5px" }} />
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <h4 style={{ fontSize: "0.9rem", marginBottom: "0.25rem", color: "var(--text-main)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{product.name}</h4>
+                              <div style={{ color: "var(--primary)", fontWeight: "bold", fontSize: "0.9rem" }}>${product.price.toFixed(2)}</div>
+                            </div>
+                            <button 
+                              className="action-btn"
+                              style={{ padding: "0.4rem 0.6rem", fontSize: "1.1rem", minWidth: "auto", alignSelf: "center" }}
+                              disabled={isOutOfStock || isLimitReached}
+                              onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                              title="Añadir al carrito"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      );
+                  })}
+                </div>
+              </div>
+            </div>
           ) : (
             /* Catalog / Wishlist View */
             <>
@@ -890,13 +1040,22 @@ export default function Home() {
                     const isFavorited = wishlist.includes(product.id);
 
                     return (
-                      <article key={product.id} className="product-card">
+                      <article 
+                        key={product.id} 
+                        className="product-card"
+                        onClick={() => {
+                          setSelectedProduct(product);
+                          setSelectedProductQuantity(1);
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        style={{ cursor: "pointer" }}
+                      >
                         {/* Wishlist Heart Button */}
                         <button
                           className="wishlist-btn"
                           aria-label={isFavorited ? "Quitar de favoritos" : "Guardar en favoritos"}
                           title={isFavorited ? "Eliminar de favoritos" : "Agregar a favoritos"}
-                          onClick={() => toggleWishlist(product.id)}
+                          onClick={(e) => { e.stopPropagation(); toggleWishlist(product.id); }}
                           style={{
                             position: "absolute",
                             top: "10px",
@@ -971,7 +1130,7 @@ export default function Home() {
                             <button
                               className="action-btn"
                               disabled={isOutOfStock || isLimitReached}
-                              onClick={() => addToCart(product)}
+                              onClick={(e) => { e.stopPropagation(); addToCart(product); }}
                             >
                               {isOutOfStock 
                                 ? "Agotado" 
