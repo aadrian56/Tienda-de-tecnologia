@@ -210,6 +210,13 @@ button, input, select, textarea {
   transform: scale(1.1);
 }
 
+/* Header Icons Base Styles */
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 /* Mobile Bottom Navigation Layout */
 @media (max-width: 767px) {
   .desktop-only {
