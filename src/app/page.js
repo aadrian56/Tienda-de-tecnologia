@@ -698,7 +698,8 @@ export default function Home() {
                       <img className="team-avatar" src="/images/andres.jpg" alt="Andres Miranda" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                       <span className="team-avatar-fallback" style={{ fontSize: "3.5rem", display: "none" }}>🧑‍💻</span>
                     </div>
-                    <h3 style={{ fontSize: "1.3rem", marginBottom: "0.5rem", color: "var(--text-main)" }}>Andres Miranda</h3>
+                    <h3 style={{ fontSize: "1.3rem", marginBottom: "0.2rem", color: "var(--text-main)" }}>Andres Miranda</h3>
+                    <p style={{ fontSize: "0.85rem", color: "var(--primary)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontWeight: "700" }}>Backend Engineer</p>
                     <p style={{ fontSize: "0.95rem", color: "var(--text-muted)", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "500" }}><span>📱</span> 0987082565</p>
                     <p style={{ fontSize: "0.9rem", color: "var(--secondary)", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "600" }}><span>✉️</span> justin.miranda@espoch.edu.ec</p>
                   </div>
@@ -709,7 +710,8 @@ export default function Home() {
                       <img className="team-avatar" src="/images/anthony.jpg" alt="Anthony Martinez" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                       <span className="team-avatar-fallback" style={{ fontSize: "3.5rem", display: "none" }}>🧑‍💻</span>
                     </div>
-                    <h3 style={{ fontSize: "1.3rem", marginBottom: "0.5rem", color: "var(--text-main)" }}>Anthony Martinez</h3>
+                    <h3 style={{ fontSize: "1.3rem", marginBottom: "0.2rem", color: "var(--text-main)" }}>Anthony Martinez</h3>
+                    <p style={{ fontSize: "0.85rem", color: "var(--primary)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontWeight: "700" }}>Lead Developer & UX/UI</p>
                     <p style={{ fontSize: "0.95rem", color: "var(--text-muted)", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "500" }}><span>📱</span> 0979857183</p>
                     <p style={{ fontSize: "0.9rem", color: "var(--secondary)", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "600" }}><span>✉️</span> adrian.martinez@espoch.edu.ec</p>
                   </div>
@@ -720,7 +722,8 @@ export default function Home() {
                       <img className="team-avatar" src="/images/brayan.jpg" alt="Brayan Guncay" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                       <span className="team-avatar-fallback" style={{ fontSize: "3.5rem", display: "none" }}>🧑‍💻</span>
                     </div>
-                    <h3 style={{ fontSize: "1.3rem", marginBottom: "0.5rem", color: "var(--text-main)" }}>Brayan Guncay</h3>
+                    <h3 style={{ fontSize: "1.3rem", marginBottom: "0.2rem", color: "var(--text-main)" }}>Brayan Guncay</h3>
+                    <p style={{ fontSize: "0.85rem", color: "var(--primary)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontWeight: "700" }}>Frontend Developer</p>
                     <p style={{ fontSize: "0.95rem", color: "var(--text-muted)", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "500" }}><span>📱</span> 0980475826</p>
                     <p style={{ fontSize: "0.9rem", color: "var(--secondary)", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "600" }}><span>✉️</span> brayan.guncay@espoch.edu.ec</p>
                   </div>
