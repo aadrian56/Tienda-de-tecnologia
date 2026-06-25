@@ -224,7 +224,7 @@ export default function Home() {
     } else {
       setCart([...cart, { ...product, quantity: 1 }]);
     }
-    setIsCartOpen(true);
+    // setIsCartOpen(true); // Removed auto-open for better UX with modal
     showToast(`¡${product.name} añadido al carrito!`, "success");
   };
 
