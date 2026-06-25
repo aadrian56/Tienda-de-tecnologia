@@ -487,8 +487,8 @@ export default function Home() {
             <span className="logo-icon">⚡</span>
             <span>ElectroMart</span>
           </div>
-          <div className="header-controls" style={{ display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap", justifyContent: "flex-end" }}>
-            {/* Tab Navigation buttons */}
+          {/* Tab Navigation buttons */}
+          <div className="header-nav-tabs">
             <button 
               className={`filter-btn ${activeTab === "catalog" ? "active" : ""}`}
               onClick={() => setActiveTab("catalog")}
@@ -511,7 +511,10 @@ export default function Home() {
             >
               Historial 📜
             </button>
+          </div>
             
+          {/* Header Icons */}
+          <div className="header-icons">
             {/* Contrast Switcher Button (REQ-IHC-16) */}
             <button 
               className="theme-toggle-btn"
@@ -547,7 +550,6 @@ export default function Home() {
                 </span>
               )}
             </button>
-
           </div>
         </div>
       </header>

@@ -152,6 +152,33 @@ button, input, select, textarea {
   gap: 1rem;
 }
 
+.header-nav-tabs {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  order: 3; /* Move to bottom on mobile */
+  width: 100%;
+}
+
+.header-icons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  order: 2; /* Keep next to logo on mobile */
+}
+
+@media (min-width: 768px) {
+  .header-nav-tabs {
+    order: 2;
+    width: auto;
+  }
+  .header-icons {
+    order: 3;
+  }
+}
+
 .logo {
   display: flex;
   align-items: center;
