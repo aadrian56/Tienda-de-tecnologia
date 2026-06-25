@@ -597,12 +597,12 @@ button:active:not(:disabled),
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-height: 350px;
-  overflow-y: auto;
+  flex-shrink: 0; /* Prevent it from being squished by the form below */
 }
 
 .cart-item {
   display: flex;
+  flex-wrap: wrap; /* Allow wrapping on small screens to prevent horizontal overflow */
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
