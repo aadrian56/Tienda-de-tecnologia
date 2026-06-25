@@ -241,8 +241,8 @@ button, input, select, textarea {
 
 @media (min-width: 1024px) {
   .main-content {
-    grid-template-columns: 1fr 400px; /* Split layout on desktop */
-    align-items: start; /* Fixes vertical alignment pushing elements down */
+    grid-template-columns: 1fr; /* Full width layout since cart is now a modal */
+    align-items: start;
   }
 }
 
@@ -477,89 +477,60 @@ button, input, select, textarea {
   cursor: not-allowed;
 }
 
-/* Sidebar / Cart and Checkout Column - Styled as Drawer on Mobile and Tablet */
-@media (max-width: 1023px) {
-  .cart-sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(2px);
-    z-index: 990;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-
-  .cart-sidebar-overlay.open {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .cart-sidebar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 440px;
-    background-color: var(--bg-card);
-    z-index: 1000;
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-    transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    border-radius: 0;
-    border-left: 1px solid var(--border);
-    padding: 1.5rem;
-    overflow-y: auto;
-  }
-
-  .cart-sidebar.open {
-    transform: translateX(0);
-  }
-
-  .cart-close-btn {
-    display: flex !important;
-  }
+/* Cart and Checkout Modal (Ventana Emergente) - Applies to all screens! */
+.cart-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 9990;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* Sidebar / Cart and Checkout Column - Static Sidebar on Desktop */
-@media (min-width: 1024px) {
-  .cart-sidebar-overlay {
-    display: none !important;
-  }
+.cart-sidebar-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
 
-  .cart-sidebar {
-    position: sticky; /* Makes the cart follow you as you scroll! */
-    top: 90px; /* Height of the sticky header + some gap */
-    width: auto;
-    max-width: none;
-    height: fit-content;
-    max-height: calc(100vh - 110px); /* Prevents it from overflowing the screen vertically */
-    overflow-y: auto; /* Allows scrolling inside the cart if it gets too long */
-    box-shadow: var(--shadow);
-    transform: none;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    background-color: var(--bg-card);
-  }
+.cart-sidebar {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 90%;
+  max-width: 500px;
+  background-color: var(--bg-card);
+  z-index: 10000;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-  .cart-close-btn {
-    display: none !important;
-  }
+.cart-sidebar.open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  visibility: visible;
+}
 
-  .cart-icon-btn {
-    display: none !important;
-  }
+.cart-close-btn {
+  display: flex !important; /* Always show close button in modal */
+}
+
+.cart-icon-btn {
+  display: flex !important; /* Always show cart button in header to open modal */
 }
 
 /* Real-time Validation & Error styles */
