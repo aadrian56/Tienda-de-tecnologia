@@ -92,9 +92,11 @@ export async function POST(request) {
       });
     }
 
-    // Calculate discount and total
+    // Calculate discount, IVA (15%), and total
     const discountAmount = hasDiscount ? parseFloat((subtotal * discountRate).toFixed(2)) : 0;
-    const total = parseFloat((subtotal - discountAmount).toFixed(2));
+    const subtotalAfterDiscount = subtotal - discountAmount;
+    const ivaAmount = parseFloat((subtotalAfterDiscount * 0.15).toFixed(2));
+    const total = parseFloat((subtotalAfterDiscount + ivaAmount).toFixed(2));
 
     // Save updated stock back to products.json
     fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2), "utf8");
@@ -107,8 +109,9 @@ export async function POST(request) {
       customer,
       items: orderItems,
       subtotal: parseFloat(subtotal.toFixed(2)),
-      coupon: hasDiscount ? "DESCUENTO10" : null,
+      coupon: hasDiscount ? (discountRate === 0.25 ? "CAM23" : "DESCUENTO10") : null,
       discount: discountAmount,
+      iva: ivaAmount,
       total: total
     };
 

@@ -327,7 +327,8 @@ export default function Home() {
   // Calculate Totals and Discounts
   const cartSubtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const discount = appliedCoupon === "DESCUENTO10" ? cartSubtotal * 0.10 : appliedCoupon === "CAM23" ? cartSubtotal * 0.25 : 0;
-  const cartTotal = cartSubtotal - discount;
+  const iva = (cartSubtotal - discount) * 0.15;
+  const cartTotal = (cartSubtotal - discount) + iva;
 
   const validateField = (field, val) => {
     let error = "";
@@ -1306,12 +1307,17 @@ export default function Home() {
                 </div>
                 
                 {/* Coupon Discount Details */}
-                {appliedCoupon === "DESCUENTO10" && (
+                {appliedCoupon && (
                   <div className="summary-row" style={{ color: "var(--secondary)", fontWeight: "500" }}>
-                    <span>Descuento (Cupón: DESCUENTO10):</span>
+                    <span>Descuento ({appliedCoupon}):</span>
                     <span>-${discount.toFixed(2)}</span>
                   </div>
                 )}
+                
+                <div className="summary-row">
+                  <span>IVA (15%):</span>
+                  <span>${iva.toFixed(2)}</span>
+                </div>
                 
                 <div className="summary-row total">
                   <span>Total:</span>
@@ -1622,6 +1628,11 @@ export default function Home() {
                 </div>
               )}
               
+              <div className="modal-details-row">
+                <span>IVA (15%):</span>
+                <span>${orderConfirmation.iva?.toFixed(2) || (orderConfirmation.total - (orderConfirmation.subtotal - orderConfirmation.discount)).toFixed(2)}</span>
+              </div>
+              
               <div className="modal-details-row" style={{ fontWeight: "700", fontSize: "1.05rem" }}>
                 <span>Total pagado:</span>
                 <span style={{ color: "var(--primary)" }}>${orderConfirmation.total.toFixed(2)}</span>
@@ -1706,6 +1717,10 @@ export default function Home() {
                 <span>-${orderConfirmation.discount.toFixed(2)}</span>
               </div>
             )}
+            <div style={{ display: "flex", justifyContent: "space-between", margin: "0.25rem 0" }}>
+              <span>IVA (15%):</span>
+              <span>${orderConfirmation.iva?.toFixed(2) || (orderConfirmation.total - (orderConfirmation.subtotal - orderConfirmation.discount)).toFixed(2)}</span>
+            </div>
             <div style={{ display: "flex", justifyContent: "space-between", margin: "0.5rem 0 0 0", paddingTop: "0.5rem", borderTop: "1px solid #ddd", fontWeight: "700", fontSize: "1.1rem" }}>
               <span>Total Pagado:</span>
               <span>${orderConfirmation.total.toFixed(2)}</span>
