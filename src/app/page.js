@@ -14,7 +14,6 @@ export default function Home() {
   // Phase 2 states
   const [activeTab, setActiveTab] = useState("home"); // home, catalog, wishlist, history
   const [wishlist, setWishlist] = useState([]);
-  const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [sortBy, setSortBy] = useState("default"); // default, price-asc, price-desc
   const [ordersHistory, setOrdersHistory] = useState([]);
@@ -460,7 +459,10 @@ export default function Home() {
     }
   };
 
-  // Filter products on frontend with category, search query, minPrice, and maxPrice concurrently
+  // Compute dynamic max price from products
+  const absoluteMaxPrice = products.length > 0 ? Math.ceil(Math.max(...products.map(p => p.price)) / 10) * 10 : 200;
+
+  // Filter products on frontend with category, search query, and maxPrice concurrently
   let filteredProducts = products.filter((p) => {
     const matchesCategory = activeCategory === "all" || 
                             p.category === activeCategory ||
@@ -469,15 +471,12 @@ export default function Home() {
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           p.description.toLowerCase().includes(searchQuery.toLowerCase());
     
-    const minVal = parseFloat(minPrice);
-    const matchesMinPrice = isNaN(minVal) || p.price >= minVal;
-
     const maxVal = parseFloat(maxPrice);
     const matchesMaxPrice = isNaN(maxVal) || p.price <= maxVal;
 
     const isFavorite = activeTab === "wishlist" ? wishlist.includes(p.id) : true;
 
-    return matchesCategory && matchesSearch && matchesMinPrice && matchesMaxPrice && isFavorite;
+    return matchesCategory && matchesSearch && matchesMaxPrice && isFavorite;
   });
 
   // Sort products
@@ -775,40 +774,36 @@ export default function Home() {
                 {/* Advanced Filters Row: Price Ranges & Sorting */}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center", backgroundColor: "var(--bg-card)", padding: "1rem", borderRadius: "var(--radius-sm)", border: "1px solid var(--border)" }}>
                   
-                  {/* Min Price */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <label style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: "500" }}>P. Mín ($):</label>
+                  {/* Dynamic Price Range Slider */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "1rem", flex: 1, minWidth: "250px" }}>
+                    <label style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: "500", whiteSpace: "nowrap" }}>
+                      Precio: $0
+                    </label>
                     <input
-                      type="number"
-                      placeholder="Min"
-                      className="form-control"
-                      style={{ width: "80px", padding: "0.35rem 0.5rem", borderRadius: "6px" }}
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
-                    />
-                  </div>
-
-                  {/* Max Price */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <label style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: "500" }}>P. Máx ($):</label>
-                    <input
-                      type="number"
-                      placeholder="Max"
-                      className="form-control"
-                      style={{ width: "80px", padding: "0.35rem 0.5rem", borderRadius: "6px" }}
-                      value={maxPrice}
+                      type="range"
+                      min="0"
+                      max={absoluteMaxPrice}
+                      step="1"
+                      className="price-range-slider"
+                      value={maxPrice === "" ? absoluteMaxPrice : maxPrice}
                       onChange={(e) => setMaxPrice(e.target.value)}
+                      style={{ flex: 1, accentColor: "var(--primary)", cursor: "pointer", height: "6px", backgroundColor: "var(--border)", borderRadius: "3px", appearance: "auto" }}
+                      title={`Precio máximo actual: $${maxPrice === "" ? absoluteMaxPrice : maxPrice}`}
                     />
+                    <span style={{ fontSize: "0.85rem", color: "var(--text-muted)", fontWeight: "500", whiteSpace: "nowrap", minWidth: "40px", textAlign: "right" }}>
+                      ${maxPrice === "" ? `${absoluteMaxPrice}+` : maxPrice}
+                    </span>
                   </div>
 
-                  {/* Clear Ranges button */}
-                  {(minPrice || maxPrice) && (
+                  {/* Clear Max Price button */}
+                  {(maxPrice !== "" && parseInt(maxPrice) < absoluteMaxPrice) && (
                     <button
                       className="filter-btn"
-                      style={{ padding: "0.35rem 0.75rem", borderRadius: "8px", fontSize: "0.75rem" }}
-                      onClick={() => { setMinPrice(""); setMaxPrice(""); }}
+                      style={{ padding: "0.35rem 0.75rem", borderRadius: "8px", fontSize: "0.75rem", whiteSpace: "nowrap" }}
+                      onClick={() => setMaxPrice("")}
+                      title="Quitar filtro de precio"
                     >
-                      Limpiar Precios
+                      Limpiar Precio
                     </button>
                   )}
 
