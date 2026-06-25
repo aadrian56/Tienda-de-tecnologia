@@ -699,7 +699,7 @@ export default function Home() {
                       <span className="team-avatar-fallback" style={{ fontSize: "3.5rem", display: "none" }}>🧑‍💻</span>
                     </div>
                     <h3 style={{ fontSize: "1.3rem", marginBottom: "0.2rem", color: "var(--text-main)" }}>Andres Miranda</h3>
-                    <p style={{ fontSize: "0.85rem", color: "var(--primary)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontWeight: "700" }}>Backend Engineer</p>
+                    <p style={{ fontSize: "0.85rem", color: "var(--primary)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontWeight: "700" }}>Lead Developer & UX/UI</p>
                     <p style={{ fontSize: "0.95rem", color: "var(--text-muted)", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "500" }}><span>📱</span> 0987082565</p>
                     <p style={{ fontSize: "0.9rem", color: "var(--secondary)", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "600" }}><span>✉️</span> justin.miranda@espoch.edu.ec</p>
                   </div>
@@ -711,7 +711,7 @@ export default function Home() {
                       <span className="team-avatar-fallback" style={{ fontSize: "3.5rem", display: "none" }}>🧑‍💻</span>
                     </div>
                     <h3 style={{ fontSize: "1.3rem", marginBottom: "0.2rem", color: "var(--text-main)" }}>Anthony Martinez</h3>
-                    <p style={{ fontSize: "0.85rem", color: "var(--primary)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontWeight: "700" }}>Lead Developer & UX/UI</p>
+                    <p style={{ fontSize: "0.85rem", color: "var(--primary)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "1rem", fontWeight: "700" }}>Backend Engineer</p>
                     <p style={{ fontSize: "0.95rem", color: "var(--text-muted)", marginBottom: "0.4rem", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "500" }}><span>📱</span> 0979857183</p>
                     <p style={{ fontSize: "0.9rem", color: "var(--secondary)", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "600" }}><span>✉️</span> adrian.martinez@espoch.edu.ec</p>
                   </div>
