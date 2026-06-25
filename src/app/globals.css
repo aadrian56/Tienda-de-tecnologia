@@ -221,15 +221,15 @@ button, input, select, textarea {
   }
 }
 
-/* Main Content Grid */
+/* Main Content Layout */
 .main-content {
   flex: 1;
   max-width: 100%; /* Fully fluid for ANY screen size */
   margin: 0 auto;
   padding: 1rem;
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr; /* Single column on mobile and tablet */
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
 }
 
@@ -239,12 +239,7 @@ button, input, select, textarea {
   }
 }
 
-@media (min-width: 1024px) {
-  .main-content {
-    grid-template-columns: 1fr; /* Full width layout since cart is now a modal */
-    align-items: start;
-  }
-}
+/* No longer needed: Desktop grid split */
 
 /* Filter Section */
 .filter-bar {
