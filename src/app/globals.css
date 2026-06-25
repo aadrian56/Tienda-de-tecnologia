@@ -183,7 +183,7 @@ button, input, select, textarea {
 .hero {
   background: linear-gradient(135deg, var(--primary) 0%, #3b0764 100%);
   color: white;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem; /* Smaller padding on mobile to save vertical space */
   text-align: center;
 }
 
@@ -200,7 +200,7 @@ button, input, select, textarea {
 
 .hero h2 {
   color: white;
-  font-size: 1.8rem;
+  font-size: 1.4rem; /* Smaller title on mobile */
   margin-bottom: 0.5rem;
 }
 
@@ -321,13 +321,20 @@ button, input, select, textarea {
 }
 
 .product-image-container {
-  height: 180px;
+  height: 120px; /* Reduced height on mobile to prevent giant cards */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1rem; /* Less padding on mobile */
   background-color: rgba(0, 0, 0, 0.02);
   border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 768px) {
+  .product-image-container {
+    height: 180px; /* Restore large size for tablets/desktop */
+    padding: 1.5rem;
+  }
 }
 
 .product-image-placeholder {
@@ -339,10 +346,16 @@ button, input, select, textarea {
 }
 
 .product-card-body {
-  padding: 1.25rem;
+  padding: 0.85rem; /* Tighter padding on mobile */
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+@media (min-width: 768px) {
+  .product-card-body {
+    padding: 1.25rem; /* Restore normal padding for larger screens */
+  }
 }
 
 .product-category {
