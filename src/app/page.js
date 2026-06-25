@@ -299,7 +299,7 @@ export default function Home() {
 
   // Apply Coupon Code
   const handleApplyCoupon = () => {
-    const code = couponInput.trim();
+    const code = couponInput.trim().toUpperCase();
     if (code === "") {
       setAppliedCoupon("");
       setCouponError("");

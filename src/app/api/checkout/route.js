@@ -32,10 +32,11 @@ export async function POST(request) {
     let hasDiscount = false;
     let discountRate = 0;
     if (coupon && coupon.trim() !== "") {
-      if (coupon.trim() === "DESCUENTO10") {
+      const normalizedCoupon = coupon.trim().toUpperCase();
+      if (normalizedCoupon === "DESCUENTO10") {
         hasDiscount = true;
         discountRate = 0.10;
-      } else if (coupon.trim() === "CAM23") {
+      } else if (normalizedCoupon === "CAM23") {
         hasDiscount = true;
         discountRate = 0.25;
       } else {
