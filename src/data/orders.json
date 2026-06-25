@@ -177,5 +177,37 @@
     "coupon": "DESCUENTO10",
     "discount": 1.4,
     "total": 12.6
+  },
+  {
+    "orderId": "ORD-714983",
+    "date": "2026-06-25T04:55:14.985Z",
+    "customer": {
+      "name": "Anthony Martinez",
+      "email": "adrian@example.com",
+      "address": "12345678976",
+      "city": "Macas",
+      "phone": "0979857183"
+    },
+    "items": [
+      {
+        "id": "prod-003",
+        "name": "Raspberry Pi Pico W",
+        "price": 7,
+        "quantity": 1,
+        "subtotal": 7
+      },
+      {
+        "id": "prod-002",
+        "name": "Arduino Uno R3",
+        "price": 22,
+        "quantity": 1,
+        "subtotal": 22
+      }
+    ],
+    "subtotal": 29,
+    "coupon": "CAM23",
+    "discount": 7.25,
+    "iva": 3.26,
+    "total": 25.01
   }
 ]

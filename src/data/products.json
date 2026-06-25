@@ -19,7 +19,7 @@
     "name": "Arduino Uno R3",
     "category": "microcontrollers",
     "price": 22,
-    "stock": 8,
+    "stock": 7,
     "description": "Placa de desarrollo basada en el microcontrolador ATmega328P. Excelente para aprender electrónica básica y programación.",
     "specs": {
       "Voltaje": "5V (Recomendado 7-12V)",
@@ -34,7 +34,7 @@
     "name": "Raspberry Pi Pico W",
     "category": "microcontrollers",
     "price": 7,
-    "stock": 13,
+    "stock": 12,
     "description": "Placa microcontroladora de bajo costo y alto rendimiento construida con el chip RP2040 y conectividad inalámbrica integrada.",
     "specs": {
       "Voltaje": "3.3V",
