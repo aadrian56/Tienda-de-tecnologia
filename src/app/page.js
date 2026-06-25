@@ -46,6 +46,30 @@ export default function Home() {
   const [theme, setTheme] = useState("light");
   const [openFaq, setOpenFaq] = useState(null);
 
+  // Scroll behavior states
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Scroll listener for sticky header
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY < 10) {
+        setIsHeaderVisible(true);
+      } else if (currentScrollY > lastScrollY) {
+        // scrolling down
+        setIsHeaderVisible(false);
+      } else {
+        // scrolling up
+        setIsHeaderVisible(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
 
   // Fetch products
   useEffect(() => {
@@ -481,7 +505,7 @@ export default function Home() {
       </div>
 
       {/* Main Header */}
-      <header className="main-header hide-on-print">
+      <header className={`main-header hide-on-print ${isHeaderVisible ? 'header-visible' : 'header-hidden'}`}>
         <div className="header-content">
           <div className="logo" onClick={() => { setActiveTab("home"); setCheckoutStep(1); }} style={{ cursor: "pointer" }}>
             <span className="logo-icon">⚡</span>
