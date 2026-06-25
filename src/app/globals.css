@@ -212,7 +212,11 @@ button, input, select, textarea {
 
 /* Mobile Bottom Navigation Layout */
 @media (max-width: 767px) {
-  .header-nav-tabs {
+  .desktop-only {
+    display: none !important;
+  }
+
+  .header-nav-tabs.mobile-only {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -257,7 +261,11 @@ button, input, select, textarea {
 
 /* Desktop Header Navigation Layout */
 @media (min-width: 768px) {
-  .header-nav-tabs {
+  .mobile-only {
+    display: none !important;
+  }
+
+  .header-nav-tabs.desktop-only {
     display: flex;
     gap: 0.5rem;
     align-items: center;

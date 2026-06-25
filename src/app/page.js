@@ -502,6 +502,47 @@ export default function Home() {
     { id: "routers", label: "Redes" }
   ];
 
+  const navigationTabs = (
+    <>
+      <button 
+        className={`nav-tab-btn ${activeTab === "home" ? "active" : ""}`}
+        onClick={() => { setActiveTab("home"); setSelectedProduct(null); }}
+      >
+        <span className="nav-icon">🏠</span>
+        <span className="nav-text">Inicio</span>
+      </button>
+      <button 
+        className={`nav-tab-btn ${activeTab === "catalog" ? "active" : ""}`}
+        onClick={() => { setActiveTab("catalog"); setSelectedProduct(null); }}
+      >
+        <span className="nav-icon">📦</span>
+        <span className="nav-text">Catálogo</span>
+      </button>
+      <button 
+        className={`nav-tab-btn ${activeTab === "wishlist" ? "active" : ""}`}
+        onClick={() => { setActiveTab("wishlist"); setSelectedProduct(null); }}
+      >
+        <span className="nav-icon">❤️</span>
+        <span className="nav-text">Favoritos</span>
+        {wishlist.length > 0 && <span className="nav-badge">{wishlist.length}</span>}
+      </button>
+      <button 
+        className={`nav-tab-btn ${activeTab === "history" ? "active" : ""}`}
+        onClick={() => { setActiveTab("history"); setSelectedProduct(null); }}
+      >
+        <span className="nav-icon">📜</span>
+        <span className="nav-text">Historial</span>
+      </button>
+      <button 
+        className="nav-tab-btn"
+        onClick={() => showToast("Perfil próximamente", "success")}
+      >
+        <span className="nav-icon">👤</span>
+        <span className="nav-text">Perfil</span>
+      </button>
+    </>
+  );
+
   return (
     <div className="app-container">
       {/* Toast Alert Notifications */}
@@ -524,43 +565,8 @@ export default function Home() {
             <span>ElectroMart</span>
           </div>
           {/* Tab Navigation buttons */}
-          <div className="header-nav-tabs">
-            <button 
-              className={`nav-tab-btn ${activeTab === "home" ? "active" : ""}`}
-              onClick={() => { setActiveTab("home"); setSelectedProduct(null); }}
-            >
-              <span className="nav-icon">🏠</span>
-              <span className="nav-text">Inicio</span>
-            </button>
-            <button 
-              className={`nav-tab-btn ${activeTab === "catalog" ? "active" : ""}`}
-              onClick={() => { setActiveTab("catalog"); setSelectedProduct(null); }}
-            >
-              <span className="nav-icon">📦</span>
-              <span className="nav-text">Catálogo</span>
-            </button>
-            <button 
-              className={`nav-tab-btn ${activeTab === "wishlist" ? "active" : ""}`}
-              onClick={() => { setActiveTab("wishlist"); setSelectedProduct(null); }}
-            >
-              <span className="nav-icon">❤️</span>
-              <span className="nav-text">Favoritos</span>
-              {wishlist.length > 0 && <span className="nav-badge">{wishlist.length}</span>}
-            </button>
-            <button 
-              className={`nav-tab-btn ${activeTab === "history" ? "active" : ""}`}
-              onClick={() => { setActiveTab("history"); setSelectedProduct(null); }}
-            >
-              <span className="nav-icon">📜</span>
-              <span className="nav-text">Historial</span>
-            </button>
-            <button 
-              className="nav-tab-btn"
-              onClick={() => showToast("Perfil próximamente", "success")}
-            >
-              <span className="nav-icon">👤</span>
-              <span className="nav-text">Perfil</span>
-            </button>
+          <div className="header-nav-tabs desktop-only">
+            {navigationTabs}
           </div>
             
           {/* Header Icons */}
@@ -603,6 +609,11 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {/* Mobile Bottom Navigation */}
+      <div className="header-nav-tabs mobile-only hide-on-print">
+        {navigationTabs}
+      </div>
 
       {/* Hero Section */}
       <section className="hero hide-on-print">
