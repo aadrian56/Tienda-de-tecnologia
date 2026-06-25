@@ -126,7 +126,7 @@ button, input, select, textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
+  max-width: 100%; /* Changed to 100% for full fluid width */
   margin: 0 auto;
   width: 100%;
 }
@@ -183,8 +183,14 @@ button, input, select, textarea {
 .hero {
   background: linear-gradient(135deg, var(--primary) 0%, #3b0764 100%);
   color: white;
-  padding: 3rem 1.5rem;
+  padding: 2rem 1rem;
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 3rem 1.5rem;
+  }
 }
 
 .hero-content {
@@ -194,25 +200,50 @@ button, input, select, textarea {
 
 .hero h2 {
   color: white;
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .hero h2 {
+    font-size: 2.2rem;
+  }
 }
 
 .hero p {
   opacity: 0.9;
-  font-size: 1.1rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  .hero p {
+    font-size: 1.1rem;
+  }
 }
 
 /* Main Content Grid */
 .main-content {
   flex: 1;
-  max-width: 1200px;
+  max-width: 100%; /* Fully fluid for ANY screen size */
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 1rem;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr; /* Single column on mobile */
+  grid-template-columns: 1fr; /* Single column on mobile and tablet */
   gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .main-content {
+    grid-template-columns: 1fr 400px; /* Split layout on desktop */
+    align-items: start; /* Fixes vertical alignment pushing elements down */
+  }
 }
 
 /* Filter Section */
@@ -259,12 +290,14 @@ button, input, select, textarea {
 .products-grid {
   display: grid;
   grid-template-columns: 1fr; /* 1 col on mobile */
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 @media (min-width: 540px) {
   .products-grid {
-    grid-template-columns: repeat(2, 1fr);
+    /* Magic CSS: Automatically fits as many 280px columns as possible based on screen width */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
   }
 }
 
@@ -431,8 +464,8 @@ button, input, select, textarea {
   cursor: not-allowed;
 }
 
-/* Sidebar / Cart and Checkout Column - Styled as Drawer on Mobile */
-@media (max-width: 767px) {
+/* Sidebar / Cart and Checkout Column - Styled as Drawer on Mobile and Tablet */
+@media (max-width: 1023px) {
   .cart-sidebar-overlay {
     position: fixed;
     top: 0;
@@ -483,16 +516,19 @@ button, input, select, textarea {
 }
 
 /* Sidebar / Cart and Checkout Column - Static Sidebar on Desktop */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .cart-sidebar-overlay {
     display: none !important;
   }
 
   .cart-sidebar {
-    position: static;
+    position: sticky; /* Makes the cart follow you as you scroll! */
+    top: 90px; /* Height of the sticky header + some gap */
     width: auto;
     max-width: none;
     height: fit-content;
+    max-height: calc(100vh - 110px); /* Prevents it from overflowing the screen vertically */
+    overflow-y: auto; /* Allows scrolling inside the cart if it gets too long */
     box-shadow: var(--shadow);
     transform: none;
     border-radius: var(--radius);
