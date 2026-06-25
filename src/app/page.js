@@ -939,7 +939,10 @@ export default function Home() {
                   type="button"
                   className="filter-btn"
                   style={{ padding: "0.25rem 0.5rem", borderRadius: "8px", fontSize: "0.75rem", color: "var(--error)", borderColor: "var(--error)", margin: 0 }}
-                  onClick={() => setShowClearCartConfirm(true)}
+                  onClick={() => {
+                    setIsCartOpen(false);
+                    setShowClearCartConfirm(true);
+                  }}
                   title="Vaciar todos los artículos del carrito"
                 >
                   Vaciar Carrito 🗑️
