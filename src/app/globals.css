@@ -1230,6 +1230,29 @@ button:active:not(:disabled),
 }
 
 /* Team Section Avatar Hover */
+.team-avatar-wrapper {
+  border-radius: 50%;
+  border: 4px solid var(--primary);
+  z-index: 1;
+  transition: border-color 0.4s ease;
+}
+
+.team-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+}
+
+.team-member-card:hover .team-avatar-wrapper {
+  z-index: 10;
+  border-color: transparent;
+}
+
 .team-member-card:hover .team-avatar {
-  transform: scale(1.15);
+  transform: scale(2.5) translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  border: 3px solid var(--primary);
 }
