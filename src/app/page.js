@@ -567,6 +567,29 @@ export default function Home() {
         
         {/* Left Column: Tab Views */}
         <section className="catalog-section">
+
+          {/* Breadcrumbs Navigation */}
+          <nav className="breadcrumbs hide-on-print" aria-label="Navegación de migas de pan" style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "1rem", display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+            <span onClick={() => { setActiveTab("catalog"); setActiveCategory("all"); }} style={{ cursor: "pointer", textDecoration: "underline" }} title="Ir al Inicio">Inicio</span>
+            <span>/</span>
+            {activeTab === "history" ? (
+              <span style={{ fontWeight: "bold", color: "var(--text-main)" }}>Historial de Pedidos</span>
+            ) : (
+              <>
+                <span onClick={() => { setActiveCategory("all"); }} style={{ cursor: "pointer", textDecoration: activeCategory !== "all" ? "underline" : "none", color: activeCategory === "all" ? "var(--text-main)" : "inherit", fontWeight: activeCategory === "all" ? "bold" : "normal" }} title={`Ver todo en ${activeTab === "wishlist" ? "Favoritos" : "Catálogo"}`}>
+                  {activeTab === "wishlist" ? "Favoritos" : "Catálogo"}
+                </span>
+                {activeCategory !== "all" && (
+                  <>
+                    <span>/</span>
+                    <span style={{ fontWeight: "bold", color: "var(--text-main)" }}>
+                      {categories.find(c => c.id === activeCategory)?.label}
+                    </span>
+                  </>
+                )}
+              </>
+            )}
+          </nav>
           
           {activeTab === "history" ? (
             /* Order History Tab View */
@@ -621,17 +644,6 @@ export default function Home() {
           ) : (
             /* Catalog / Wishlist View */
             <>
-              {/* Breadcrumbs Navigation */}
-              <nav className="breadcrumbs hide-on-print" aria-label="Navegación de migas de pan" style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "1rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                <span onClick={() => { setActiveTab("catalog"); setActiveCategory("all"); }} style={{ cursor: "pointer", textDecoration: "underline" }} title="Ir al Inicio">Inicio</span>
-                <span>/</span>
-                <span onClick={() => { setActiveTab("catalog"); }} style={{ cursor: "pointer" }} title="Ver todo el Catálogo">Catálogo</span>
-                <span>/</span>
-                <span style={{ fontWeight: "bold", color: "var(--text-main)" }}>
-                  {activeCategory === "all" ? "Todos los componentes" : categories.find(c => c.id === activeCategory)?.label}
-                </span>
-              </nav>
-
               {/* Controls Bar: Category Filters & Search Input */}
               <div className="controls-bar" style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "1.5rem" }}>
                 
