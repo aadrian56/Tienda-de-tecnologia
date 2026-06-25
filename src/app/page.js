@@ -12,7 +12,7 @@ export default function Home() {
   const [toasts, setToasts] = useState([]);
   
   // Phase 2 states
-  const [activeTab, setActiveTab] = useState("catalog"); // catalog, wishlist, history
+  const [activeTab, setActiveTab] = useState("home"); // home, catalog, wishlist, history
   const [wishlist, setWishlist] = useState([]);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -483,12 +483,19 @@ export default function Home() {
       {/* Main Header */}
       <header className="main-header hide-on-print">
         <div className="header-content">
-          <div className="logo" onClick={() => { setActiveTab("catalog"); setCheckoutStep(1); }} style={{ cursor: "pointer" }}>
+          <div className="logo" onClick={() => { setActiveTab("home"); setCheckoutStep(1); }} style={{ cursor: "pointer" }}>
             <span className="logo-icon">⚡</span>
             <span>ElectroMart</span>
           </div>
           {/* Tab Navigation buttons */}
           <div className="header-nav-tabs">
+            <button 
+              className={`filter-btn ${activeTab === "home" ? "active" : ""}`}
+              onClick={() => setActiveTab("home")}
+              style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "home" ? "none" : "1px solid var(--border)" }}
+            >
+              Inicio 🏠
+            </button>
             <button 
               className={`filter-btn ${activeTab === "catalog" ? "active" : ""}`}
               onClick={() => setActiveTab("catalog")}
@@ -570,10 +577,12 @@ export default function Home() {
 
           {/* Breadcrumbs Navigation */}
           <nav className="breadcrumbs hide-on-print" aria-label="Navegación de migas de pan" style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "1rem", display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
-            <span onClick={() => { setActiveTab("catalog"); setActiveCategory("all"); }} style={{ cursor: "pointer", textDecoration: "underline" }} title="Ir al Inicio">Inicio</span>
+            <span onClick={() => { setActiveTab("home"); setActiveCategory("all"); }} style={{ cursor: "pointer", textDecoration: "underline" }} title="Ir al Inicio">Inicio</span>
             <span>/</span>
             {activeTab === "history" ? (
               <span style={{ fontWeight: "bold", color: "var(--text-main)" }}>Historial de Pedidos</span>
+            ) : activeTab === "home" ? (
+              <span style={{ fontWeight: "bold", color: "var(--text-main)" }}>Acerca de</span>
             ) : (
               <>
                 <span onClick={() => { setActiveCategory("all"); }} style={{ cursor: "pointer", textDecoration: activeCategory !== "all" ? "underline" : "none", color: activeCategory === "all" ? "var(--text-main)" : "inherit", fontWeight: activeCategory === "all" ? "bold" : "normal" }} title={`Ver todo en ${activeTab === "wishlist" ? "Favoritos" : "Catálogo"}`}>
@@ -591,7 +600,56 @@ export default function Home() {
             )}
           </nav>
           
-          {activeTab === "history" ? (
+          {activeTab === "home" ? (
+            /* Home / Store Details View */
+            <div style={{ backgroundColor: "var(--bg-card)", padding: "2rem", borderRadius: "var(--radius)", border: "1px solid var(--border)", boxShadow: "var(--shadow)" }}>
+              <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+                <span style={{ fontSize: "3.5rem" }}>⚡</span>
+                <h2 style={{ fontSize: "2rem", color: "var(--primary)", marginBottom: "1rem", marginTop: "0.5rem" }}>Bienvenido a ElectroMart</h2>
+                <p style={{ fontSize: "1.1rem", color: "var(--text-muted)", maxWidth: "700px", margin: "0 auto", lineHeight: "1.6" }}>
+                  Tu proveedor líder en componentes electrónicos de alta fidelidad. Somos una tienda especializada en herramientas de desarrollo, microcontroladores, sensores y equipos de red para estudiantes, ingenieros y makers que buscan hacer realidad sus prototipos.
+                </p>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1.5rem", marginBottom: "3rem" }}>
+                <div style={{ padding: "1.5rem", backgroundColor: "rgba(98, 0, 238, 0.05)", borderRadius: "var(--radius)", border: "1px solid rgba(98, 0, 238, 0.1)" }}>
+                  <h3 style={{ color: "var(--primary)", marginBottom: "0.75rem", fontSize: "1.1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span>🛠️</span> Calidad Garantizada
+                  </h3>
+                  <p style={{ fontSize: "0.95rem", color: "var(--text-muted)", lineHeight: "1.5" }}>
+                    Todos nuestros componentes provienen de fabricantes certificados y pasan por estrictas pruebas para asegurar el máximo rendimiento en tus diseños.
+                  </p>
+                </div>
+                <div style={{ padding: "1.5rem", backgroundColor: "rgba(3, 218, 198, 0.05)", borderRadius: "var(--radius)", border: "1px solid rgba(3, 218, 198, 0.1)" }}>
+                  <h3 style={{ color: "var(--secondary)", marginBottom: "0.75rem", fontSize: "1.1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span>🚀</span> Stock en Tiempo Real
+                  </h3>
+                  <p style={{ fontSize: "0.95rem", color: "var(--text-muted)", lineHeight: "1.5" }}>
+                    Contamos con un avanzado sistema de validación de existencias. Lo que ves disponible en la tienda es exactamente lo que tenemos listo para enviar.
+                  </p>
+                </div>
+                <div style={{ padding: "1.5rem", backgroundColor: "rgba(255, 183, 77, 0.05)", borderRadius: "var(--radius)", border: "1px solid rgba(255, 183, 77, 0.1)" }}>
+                  <h3 style={{ color: "var(--warning)", marginBottom: "0.75rem", fontSize: "1.1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span>💬</span> Soporte Especializado
+                  </h3>
+                  <p style={{ fontSize: "0.95rem", color: "var(--text-muted)", lineHeight: "1.5" }}>
+                    ¿Dudas de compatibilidad? ¿No sabes qué placa elegir? Contamos con documentación y asistencia para ayudarte a concluir con éxito tu proyecto.
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ textAlign: "center" }}>
+                <button 
+                  onClick={() => setActiveTab("catalog")}
+                  style={{ backgroundColor: "var(--primary)", color: "white", border: "none", padding: "1rem 2.5rem", borderRadius: "30px", fontSize: "1.1rem", fontWeight: "bold", cursor: "pointer", boxShadow: "0 4px 15px rgba(98, 0, 238, 0.3)", transition: "transform 0.2s" }}
+                  onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+                  onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+                >
+                  Explorar Catálogo 📦
+                </button>
+              </div>
+            </div>
+          ) : activeTab === "history" ? (
             /* Order History Tab View */
             <div style={{ backgroundColor: "var(--bg-card)", padding: "1.5rem", borderRadius: "var(--radius)", border: "1px solid var(--border)", boxShadow: "var(--shadow)" }}>
               <h3 style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
