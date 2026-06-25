@@ -526,33 +526,40 @@ export default function Home() {
           {/* Tab Navigation buttons */}
           <div className="header-nav-tabs">
             <button 
-              className={`filter-btn ${activeTab === "home" ? "active" : ""}`}
+              className={`nav-tab-btn ${activeTab === "home" ? "active" : ""}`}
               onClick={() => { setActiveTab("home"); setSelectedProduct(null); }}
-              style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "home" ? "none" : "1px solid var(--border)" }}
             >
-              Inicio 🏠
+              <span className="nav-icon">🏠</span>
+              <span className="nav-text">Inicio</span>
             </button>
             <button 
-              className={`filter-btn ${activeTab === "catalog" ? "active" : ""}`}
+              className={`nav-tab-btn ${activeTab === "catalog" ? "active" : ""}`}
               onClick={() => { setActiveTab("catalog"); setSelectedProduct(null); }}
-              style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "catalog" ? "none" : "1px solid var(--border)" }}
             >
-              Catálogo 📦
+              <span className="nav-icon">📦</span>
+              <span className="nav-text">Catálogo</span>
             </button>
             <button 
-              className={`filter-btn ${activeTab === "wishlist" ? "active" : ""}`}
+              className={`nav-tab-btn ${activeTab === "wishlist" ? "active" : ""}`}
               onClick={() => { setActiveTab("wishlist"); setSelectedProduct(null); }}
-              style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "wishlist" ? "none" : "1px solid var(--border)" }}
             >
-              Favoritos ❤️
-              {wishlist.length > 0 && <span style={{ marginLeft: "4px", fontSize: "0.80rem" }}>({wishlist.length})</span>}
+              <span className="nav-icon">❤️</span>
+              <span className="nav-text">Favoritos</span>
+              {wishlist.length > 0 && <span className="nav-badge">{wishlist.length}</span>}
             </button>
             <button 
-              className={`filter-btn ${activeTab === "history" ? "active" : ""}`}
+              className={`nav-tab-btn ${activeTab === "history" ? "active" : ""}`}
               onClick={() => { setActiveTab("history"); setSelectedProduct(null); }}
-              style={{ padding: "0.5rem 1rem", borderRadius: "15px", fontSize: "0.85rem", border: activeTab === "history" ? "none" : "1px solid var(--border)" }}
             >
-              Historial 📜
+              <span className="nav-icon">📜</span>
+              <span className="nav-text">Historial</span>
+            </button>
+            <button 
+              className="nav-tab-btn"
+              onClick={() => showToast("Perfil próximamente", "success")}
+            >
+              <span className="nav-icon">👤</span>
+              <span className="nav-text">Perfil</span>
             </button>
           </div>
             
