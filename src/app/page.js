@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import AdminDashboard from "./AdminDashboard";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -16,7 +17,8 @@ export default function Home() {
   const [selectedProductQuantity, setSelectedProductQuantity] = useState(1);
   
   // Phase 2 states
-  const [activeTab, setActiveTab] = useState("home"); // home, catalog, wishlist, history
+  const [activeTab, setActiveTab] = useState("home"); // home, catalog, wishlist, history, admin
+  const [userRole, setUserRole] = useState("cliente"); // cliente, administrador
   const [wishlist, setWishlist] = useState([]);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -177,7 +179,9 @@ export default function Home() {
   async function loadOrdersHistory() {
     setLoadingOrders(true);
     try {
-      const res = await fetch("/api/orders");
+      const res = await fetch("/api/orders", {
+        headers: { "x-user-role": userRole }
+      });
       if (res.ok) {
         const data = await res.json();
         setOrdersHistory(data);
@@ -518,21 +522,34 @@ export default function Home() {
         <span className="nav-icon">📦</span>
         <span className="nav-text">Catálogo</span>
       </button>
-      <button 
-        className={`nav-tab-btn ${activeTab === "wishlist" ? "active" : ""}`}
-        onClick={() => { setActiveTab("wishlist"); setSelectedProduct(null); }}
-      >
-        <span className="nav-icon">❤️</span>
-        <span className="nav-text">Favoritos</span>
-        {wishlist.length > 0 && <span className="nav-badge">{wishlist.length}</span>}
-      </button>
-      <button 
-        className={`nav-tab-btn ${activeTab === "history" ? "active" : ""}`}
-        onClick={() => { setActiveTab("history"); setSelectedProduct(null); }}
-      >
-        <span className="nav-icon">📜</span>
-        <span className="nav-text">Historial</span>
-      </button>
+      {userRole === "cliente" && (
+        <>
+          <button 
+            className={`nav-tab-btn ${activeTab === "wishlist" ? "active" : ""}`}
+            onClick={() => { setActiveTab("wishlist"); setSelectedProduct(null); }}
+          >
+            <span className="nav-icon">❤️</span>
+            <span className="nav-text">Favoritos</span>
+            {wishlist.length > 0 && <span className="nav-badge">{wishlist.length}</span>}
+          </button>
+          <button 
+            className={`nav-tab-btn ${activeTab === "history" ? "active" : ""}`}
+            onClick={() => { setActiveTab("history"); setSelectedProduct(null); }}
+          >
+            <span className="nav-icon">🕒</span>
+            <span className="nav-text">Historial</span>
+          </button>
+        </>
+      )}
+      {userRole === "administrador" && (
+        <button 
+          className={`nav-tab-btn ${activeTab === "admin" ? "active" : ""}`}
+          onClick={() => { setActiveTab("admin"); setSelectedProduct(null); }}
+        >
+          <span className="nav-icon">⚙️</span>
+          <span className="nav-text">Administración</span>
+        </button>
+      )}
       <button 
         className="nav-tab-btn"
         onClick={() => showToast("Perfil próximamente", "success")}
@@ -571,6 +588,28 @@ export default function Home() {
             
           {/* Header Icons */}
           <div className="header-icons">
+            {/* Role Switcher */}
+            <select 
+              value={userRole} 
+              onChange={(e) => {
+                setUserRole(e.target.value);
+                if (e.target.value === "cliente" && activeTab === "admin") {
+                  setActiveTab("home");
+                }
+              }}
+              style={{
+                padding: "0.4rem",
+                borderRadius: "6px",
+                border: "1px solid var(--border)",
+                background: "var(--bg-card)",
+                color: "var(--text-main)",
+                marginRight: "0.5rem"
+              }}
+            >
+              <option value="cliente">Cliente</option>
+              <option value="administrador">Admin</option>
+            </select>
+
             {/* Contrast Switcher Button (REQ-IHC-16) */}
             <button 
               className="theme-toggle-btn"
@@ -594,18 +633,20 @@ export default function Home() {
               {theme === "light" ? "🌙" : "☀️"}
             </button>
 
-            <button 
-              className="cart-icon-btn" 
-              aria-label="Ver Carrito"
-              onClick={() => setIsCartOpen(!isCartOpen)}
-            >
-              🛒
-              {cart.length > 0 && (
-                <span className={`cart-badge ${animateBadge ? "animate" : ""}`}>
-                  {cart.reduce((count, item) => count + item.quantity, 0)}
-                </span>
-              )}
-            </button>
+            {userRole === "cliente" && (
+              <button 
+                className="cart-icon-btn" 
+                aria-label="Ver Carrito"
+                onClick={() => setIsCartOpen(!isCartOpen)}
+              >
+                🛒
+                {cart.length > 0 && (
+                  <span className={`cart-badge ${animateBadge ? "animate" : ""}`}>
+                    {cart.reduce((count, item) => count + item.quantity, 0)}
+                  </span>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -654,7 +695,9 @@ export default function Home() {
             )}
           </nav>
           
-          {activeTab === "home" ? (
+          {activeTab === "admin" && userRole === "administrador" ? (
+            <AdminDashboard showToast={showToast} />
+          ) : activeTab === "home" ? (
             /* Home / Store Details View */
             <div style={{ backgroundColor: "var(--bg-card)", padding: "2rem", borderRadius: "var(--radius)", border: "1px solid var(--border)", boxShadow: "var(--shadow)" }}>
               <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>

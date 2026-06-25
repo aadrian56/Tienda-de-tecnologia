@@ -1366,3 +1366,30 @@ button:active:not(:disabled),
   box-shadow: 0 15px 35px rgba(0,0,0,0.4);
   border: 3px solid var(--primary);
 }
+
+/* --- Admin Dashboard Styles --- */
+
+.admin-dashboard {
+  background-color: var(--bg-card);
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.admin-table th, .admin-table td {
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-table tbody tr:hover {
+  background-color: rgba(98, 0, 238, 0.05);
+}
+
+.admin-form input, .admin-form select, .admin-form textarea {
+  width: 100%;
+}
+
+.admin-form input:focus, .admin-form select:focus, .admin-form textarea:focus {
+  outline: 2px solid var(--primary);
+  border-color: transparent;
+}

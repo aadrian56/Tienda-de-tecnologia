@@ -4,13 +4,22 @@ import path from "path";
 
 const ordersFilePath = path.join(process.cwd(), "src/data", "orders.json");
 
-export async function GET() {
+export async function GET(request) {
   const timestamp = new Date().toISOString();
   try {
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get("email");
+    const role = request.headers.get("x-user-role") || "cliente";
+
     let orders = [];
     if (fs.existsSync(ordersFilePath)) {
       const fileData = fs.readFileSync(ordersFilePath, "utf8");
       orders = JSON.parse(fileData);
+    }
+
+    // Filter if role is cliente and email is provided
+    if (role !== "administrador" && email) {
+      orders = orders.filter(o => o.customer.email === email);
     }
     
     // Return orders sorted by date descending (most recent first)
