@@ -153,5 +153,29 @@
     "coupon": "DESCUENTO10",
     "discount": 5.2,
     "total": 46.8
+  },
+  {
+    "orderId": "ORD-576560",
+    "date": "2026-06-25T03:02:50.226Z",
+    "customer": {
+      "name": "Adrian",
+      "email": "adrian@example.com",
+      "address": "asdasdfasdasdas",
+      "city": "Macas",
+      "phone": "0979857183"
+    },
+    "items": [
+      {
+        "id": "prod-003",
+        "name": "Raspberry Pi Pico W",
+        "price": 7,
+        "quantity": 2,
+        "subtotal": 14
+      }
+    ],
+    "subtotal": 14,
+    "coupon": "DESCUENTO10",
+    "discount": 1.4,
+    "total": 12.6
   }
 ]

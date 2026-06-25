@@ -34,7 +34,7 @@
     "name": "Raspberry Pi Pico W",
     "category": "microcontrollers",
     "price": 7,
-    "stock": 15,
+    "stock": 13,
     "description": "Placa microcontroladora de bajo costo y alto rendimiento construida con el chip RP2040 y conectividad inalámbrica integrada.",
     "specs": {
       "Voltaje": "3.3V",
